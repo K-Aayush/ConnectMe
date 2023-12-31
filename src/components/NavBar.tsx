@@ -5,13 +5,13 @@ import { Button } from "./index"
 
 const NavBar = () => {
     return (
-        <nav className="bg-white border-gray-200">
+        <nav className="">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <div>
                     <Image
                         src={"/Image/connectme logo.png"}
                         objectFit="cover"
-                        width={90}
+                        width={100}
                         height={0}
                         alt={""}
                     />
