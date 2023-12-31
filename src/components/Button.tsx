@@ -8,6 +8,7 @@ interface ButtonProps {
     disabled?: boolean;
     small?: boolean;
     custom?: string;
+    gradient?: boolean;
     icon?: IconType;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -18,13 +19,14 @@ const Button: React.FC<ButtonProps> = ({
     disabled,
     small,
     custom,
+    gradient,
     icon: Icon,
     onClick
 }) => {
     return (
         <button
             disabled={disabled}
-            className={`disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-tr from-[#e90b78] to-[#f06e52] rounded-full hover:opacity-80 hover:from-[#f06e52] hover:to-[#e90b78] w-fit border-none gap-2 ${small ? 'text-sm font-light' : 'text-md font-semibold'} ${small ? 'py-1 px-2' : 'py-3 px-4'} ${custom ? custom : ""}`}
+            className={`disabled:opacity-70 disabled:cursor-not-allowed ${gradient ? "bg-gradient-to-tr from-[#e90b78] to-[#f06e52] hover:from-[#f06e52] hover:to-[#e90b78]" : "" } hover:opacity-80 rounded-full gap-2 ${small ? 'text-sm font-light' : 'text-md font-semibold'} ${small ? 'py-1 px-2' : 'py-3 px-4'} ${custom ? custom : ""}`}
         >
             {Icon && <Icon size={24} />}
             {label}
