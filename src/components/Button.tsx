@@ -1,3 +1,5 @@
+"use client"
+
 import { IconType } from "react-icons";
 
 // Defining the props that the Button component can accept
@@ -22,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
         <button
             disabled={disabled}
-            className={`disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-tr from-[#e90b78] to-[#f06e52] rounded-md hover:opacity-90 w-full flex items-center justify-center gap-2 ${small ? 'text-sm font-light' : 'text-md font-semibold'} ${small ? 'py-1 px-2' : 'py-3 px-4'} ${custom ? custom : ""}`}
+            className={`disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-tr from-[#e90b78] to-[#f06e52] rounded-full hover:opacity-80 hover:from-[#f06e52] hover:to-[#e90b78] w-fit border-none gap-2 ${small ? 'text-sm font-light' : 'text-md font-semibold'} ${small ? 'py-1 px-2' : 'py-3 px-4'} ${custom ? custom : ""}`}
         >
             {Icon && <Icon size={24} />}
             {label}
@@ -30,4 +32,4 @@ const Button: React.FC<ButtonProps> = ({
     )
 }
 
-export default Button
+export default Button;
