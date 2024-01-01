@@ -1,13 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { Button, NavBar } from "./index"
+import { Button, NavBar, AuthModal } from "./index";
+import { useState } from "react";
 
 
 
 const HomePage = () => {
+    const [showModal, setShowModal] = useState(false);
+
+    const handleOnClose = () => setShowModal(false);
+
     return (
-        <div className="realative">
+        <div className="">
             <img
                 src="/Image/dating.jpg"
                 alt="Background"
@@ -24,8 +29,10 @@ const HomePage = () => {
                         gradient
                         custom="text-white tracking-wide"
                         label="Create Account"
-                        onClick={() => { }}
-                    />
+                        onClick={() => setShowModal(true)}
+                    ></Button>
+
+                    <AuthModal isVisible={showModal} onClose={handleOnClose} />
                 </div>
             </div>
         </div>
