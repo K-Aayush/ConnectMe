@@ -12,7 +12,7 @@ const NavBar = () => {
                         src={"/Image/connectme logo.png"}
                         objectFit="cover"
                         width={100}
-                        height={0}
+                        height={100}
                         alt={""}
                     />
                 </div>
