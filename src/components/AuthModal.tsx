@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { Button } from "./index";
 
-const AuthModal = ({ isVisible, onClose }: any) => {
+interface AuthModalProps {
+    isVisible: boolean;
+    onClose: () => void;
+    setIsSignUp: React.Dispatch<React.SetStateAction<boolean>>;
+    isSignUp: boolean;
+}
+
+const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps) => {
 
     const [email, setEmail] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
@@ -20,13 +27,19 @@ const AuthModal = ({ isVisible, onClose }: any) => {
         }
     };
 
-    
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        try {
+            
+        } catch (error) {
+            
+        }
+
+
     }
 
-    
+
 
     return (
         <div
@@ -36,12 +49,9 @@ const AuthModal = ({ isVisible, onClose }: any) => {
         >
             <div className="relative bg-gradient-to-b from-[#fdbcdbcb] via-[#ffd6eacb] to-[#ffb5a4dc] p-8 rounded-xl">
                 <div className="flex flex-col items-center justify-center gap-2">
-                    <h1 className="mt-4 text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] text-3xl font-bold" >
-                        Create Account
+                    <h1 className="my-4 text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] text-3xl font-bold" >
+                        {isSignUp ? 'Create Account' : 'Log In'}
                     </h1>
-                    <p className="text-black">
-                        Find Your Soulmate
-                    </p>
                     <form
                         className="flex flex-col gap-3"
                         onSubmit={handleSubmit}
@@ -67,7 +77,7 @@ const AuthModal = ({ isVisible, onClose }: any) => {
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         />
 
-                        <input
+                        {isSignUp &&<input
                             className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
                             type="password"
                             id="password-check"
@@ -75,17 +85,25 @@ const AuthModal = ({ isVisible, onClose }: any) => {
                             placeholder="Confirm Password"
                             required={true}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
-                        />
+                        />}
 
-                        <Button
+                        {isSignUp ? <Button
                             custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
                             label="Create"
-                            onClick={() => {}}
+                            onClick={() => { }}
+                        /> :  
+                        <Button
+                            custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
+                            label="Log In"
+                            onClick={() => { }}
                         />
+                        }
                         <hr />
                     </form>
 
-                    <p>Already have an account? <span className="text-blue-500 cursor-pointer">Login</span> </p>
+                     <p className="text-black text-xl">
+                        Find Your Soulmate
+                    </p> 
                 </div>
                 <div
                     onClick={handleOnClose}
