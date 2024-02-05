@@ -10,6 +10,8 @@ interface AuthModalProps {
     isSignUp: boolean;
 }
 
+
+
 const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps) => {
 
     const [email, setEmail] = useState<string | null>(null);
