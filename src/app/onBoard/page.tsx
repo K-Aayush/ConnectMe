@@ -1,8 +1,15 @@
-import React from 'react'
+'use client'
+
+import { useState } from 'react'
+import { NavBar } from '@/components'
+
 
 const OnBoard = () => {
   return (
-    <div>hello world</div>
+    <NavBar 
+        setShowModal={() => {}}
+        showLoginButton={false}
+    />
   )
 }
 

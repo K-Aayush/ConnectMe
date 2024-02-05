@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { Button } from "./index"
 
-const NavBar = ({ setIsSignUp, setShowModal }: any) => {
+const NavBar = ({ setIsSignUp, setShowModal, showLoginButton = true }: any) => {
 
     const handleClick = () => {
         setShowModal(true);
@@ -23,11 +23,11 @@ const NavBar = ({ setIsSignUp, setShowModal }: any) => {
                     />
                 </div>
 
-                <Button
+                {showLoginButton && <Button
                     label="Log In"
                     custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
                     onClick={handleClick}
-                />
+                />}
             </div>
         </nav>
     )
