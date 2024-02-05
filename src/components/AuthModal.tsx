@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "./index";
 
+// Defining the props for the AuthModal component
 interface AuthModalProps {
     isVisible: boolean;
     onClose: () => void;
@@ -11,7 +12,7 @@ interface AuthModalProps {
 }
 
 
-
+// AuthModal component definition
 const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps) => {
 
     const [email, setEmail] = useState<string | null>(null);
@@ -21,7 +22,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
 
     if (!isVisible) return null;
 
-
+    // Function to handle closing the modal
     const handleOnClose = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         if (target.id === "container") {
@@ -29,7 +30,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
         }
     };
 
-
+    // Function to handle form submission
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {

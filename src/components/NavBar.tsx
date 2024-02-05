@@ -3,8 +3,10 @@
 import Image from "next/image"
 import { Button } from "./index"
 
+// Defining Navbar Component
 const NavBar = ({ setIsSignUp, setShowModal, showLoginButton = true }: any) => {
 
+    // Function to handle the "Log In" button click
     const handleClick = () => {
         setShowModal(true);
         setIsSignUp(false);
