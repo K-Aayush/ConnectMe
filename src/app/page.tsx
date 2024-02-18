@@ -1,9 +1,9 @@
-import Button from "@/components/Button";
+import HomePage from "@/components/Home"
 
 export default function Home() {
   return (
     <main className="">
-      Home
+      <HomePage />
     </main>
   )
 }
