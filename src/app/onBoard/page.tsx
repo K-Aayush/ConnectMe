@@ -28,7 +28,11 @@ const OnBoard = () => {
         <>
             <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
                 <div className="flex flex-col items-center justify-center w-full flex-1 px-8 md:px-16 lg:px-20 text-center">
+
+                    {/* outer container for entire content */}
                     <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl">
+
+                        {/* Left side - Account creation form */}
                         <div className="w-full md:w-3/5 p-4 md:p-8">
                             <div className="text-left font-bold">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Connect</span>Me
@@ -37,6 +41,8 @@ const OnBoard = () => {
                                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] mb-2">Create Account</h2>
                                 <div className="border-2 w-10 border-[#e90b78] inline-block"></div>
                             </div>
+
+                            {/* Form elements */}
                             <form className="w-full">
                                 <div className="flex flex-col">
                                     <label htmlFor="first_name" className="text-slate-800 font-semibold text-start">First Name</label>
@@ -200,10 +206,14 @@ const OnBoard = () => {
 
                             </form>
                         </div>
+
+                        {/* Right side - Profile picture section */}
                         <div className="w-full md:w-2/5 py-8 md:py-36 px-4 sm:px-8 lg:px-12">
                             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2"> <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Profile</span> Picture</h2>
                             <div className="border-2 w-8 border-[#f06e52] inline-block mb-2"></div>
                             <div className="flex flex-col">
+
+                                {/* File input for uploading profile picture */}
                                 <input
                                     id="photo"
                                     type="file"
@@ -212,6 +222,8 @@ const OnBoard = () => {
                                     onChange={handleImageChange}
                                     className="mt-2 items-start"
                                 />
+
+                                {/* Image preview */}
                                 {profileImage && (
                                     <img
                                         src={URL.createObjectURL(profileImage)}
@@ -222,9 +234,7 @@ const OnBoard = () => {
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </>
     )
