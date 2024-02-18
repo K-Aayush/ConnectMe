@@ -27,17 +27,17 @@ const OnBoard = () => {
     return (
         <>
             <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
-                <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-                    <div className="bg-white rounded-2xl shadow-2xl flex w-2/3 max-w-4xl">
-                        <div className="w-3/5 p-5">
+                <div className="flex flex-col items-center justify-center w-full flex-1 px-8 md:px-16 lg:px-20 text-center">
+                    <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl">
+                        <div className="w-full md:w-3/5 p-4 md:p-8">
                             <div className="text-left font-bold">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Connect</span>Me
                             </div>
-                            <div className="py-10">
-                                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] mb-2">Create Account</h2>
+                            <div className="py-6 md:py-10">
+                                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] mb-2">Create Account</h2>
                                 <div className="border-2 w-10 border-[#e90b78] inline-block"></div>
                             </div>
-                            <form>
+                            <form className="w-full">
                                 <div className="flex flex-col">
                                     <label htmlFor="first_name" className="text-slate-800 font-semibold text-start">First Name</label>
                                     <input
@@ -192,7 +192,7 @@ const OnBoard = () => {
 
                                 <div className="flex text-start my-2">
                                     <Button
-                                        gradient 
+                                        gradient
                                         onClick={handleSubmit}
                                         label="Create Account"
                                     />
@@ -200,26 +200,26 @@ const OnBoard = () => {
 
                             </form>
                         </div>
-                        <div className="w-2/5 py-36 px-12">
-                            <h2 className="text-3xl font-bold mb-2"> <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Profile</span> Picture</h2>
-                            <div className="border-2 w-10 border-[#f06e52] inline-block mb-2"></div>
-                            <input
-                                id="photo"
-                                type="file"
-                                name="photo"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                className="mt-2"
-                            />
-                            {profileImage && (
-                                <Image
-                                    src={URL.createObjectURL(profileImage)}
-                                    alt="Profile Preview"
-                                    className="mt-4 rounded"
-                                    width={200}
-                                    height={200}
+                        <div className="w-full md:w-2/5 py-8 md:py-36 px-4 sm:px-8 lg:px-12">
+                            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2"> <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Profile</span> Picture</h2>
+                            <div className="border-2 w-8 border-[#f06e52] inline-block mb-2"></div>
+                            <div className="flex flex-col">
+                                <input
+                                    id="photo"
+                                    type="file"
+                                    name="photo"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="mt-2 items-start"
                                 />
-                            )}
+                                {profileImage && (
+                                    <img
+                                        src={URL.createObjectURL(profileImage)}
+                                        alt="Profile Preview"
+                                        className="rounded w-[150px] h-[150px] object-cover mt-2"
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
 
