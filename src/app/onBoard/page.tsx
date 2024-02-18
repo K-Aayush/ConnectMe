@@ -1,7 +1,8 @@
 'use client'
 
+import { Button } from '@/components';
+import Image from 'next/image';
 import { useState } from 'react'
-import { NavBar } from '@/components'
 
 
 const OnBoard = () => {
@@ -25,172 +26,205 @@ const OnBoard = () => {
 
     return (
         <>
-            <NavBar
-                setShowModal={() => { }}
-                showLoginButton={false}
-            />
+            <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
+                <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
+                    <div className="bg-white rounded-2xl shadow-2xl flex w-2/3 max-w-4xl">
+                        <div className="w-3/5 p-5">
+                            <div className="text-left font-bold">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Connect</span>Me
+                            </div>
+                            <div className="py-10">
+                                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] mb-2">Create Account</h2>
+                                <div className="border-2 w-10 border-[#e90b78] inline-block"></div>
+                            </div>
+                            <form>
+                                <div className="flex flex-col">
+                                    <label htmlFor="first_name" className="text-slate-800 font-semibold text-start">First Name</label>
+                                    <input
+                                        id="first_name"
+                                        type="text"
+                                        name="first_name"
+                                        placeholder="John"
+                                        required={true}
+                                        value={""}
+                                        onChange={handleChange}
+                                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-pink-500 my-2"
+                                    />
+                                </div>
 
-            <div>
-                <h2>CREATE ACCOUNT</h2>
+                                <div className="flex flex-col">
+                                    <label className="text-slate-800 font-semibold text-start">Date of Birth</label>
+                                    <input
+                                        id="Date_of_Birth"
+                                        name="datetime"
+                                        type="date"
+                                        className="border w-fit p-2 border-gray-300 rounded-md focus:outline-none focus:border-pink-500 my-2"
+                                        required={true}
+                                        onChange={handleChange}
+                                    />
+                                </div>
 
-                <form 
-                className="flex justify-between"
-                action=""
-                >
-                    <section>
-                        <label htmlFor="first_name">First Name</label>
-                        <input
-                            id="first_name"
-                            type="text"
-                            name="first_name"
-                            placeholder="First Name"
-                            required={true}
-                            value={""}
-                            onChange={handleChange}
-                        />
+                                <div className="flex flex-col">
+                                    <label className="text-slate-800 font-semibold text-start">Gender</label>
+                                    <div className="flex flex-row gap-2 my-2">
+                                        <label tabIndex={0} htmlFor="man-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                            <input
+                                                id="man-gender-identity"
+                                                tabIndex={-1}
+                                                type="radio"
+                                                name="gender_identity"
+                                                required={true}
+                                                value="man"
+                                                onChange={handleChange}
+                                                checked={false}
+                                                className="sr-only"
+                                            />
+                                            <span className="text-sm"> Man </span>
+                                        </label>
 
-                        <label>Birthday</label>
-                        <div>
-                            <input
-                                id="dob_day"
-                                type="number"
-                                name="dob_day"
-                                placeholder="DD"
-                                required={true}
-                                value={""}
-                                onChange={handleChange}
-                            />
-                            <input
-                                id="dob_month"
-                                type="number"
-                                name="dob_month"
-                                placeholder="MM"
-                                required={true}
-                                value={""}
-                                onChange={handleChange}
-                            />
-                            <input
-                                id="dob_year"
-                                type="number"
-                                name="dob_year"
-                                placeholder="YYYY"
-                                required={true}
-                                value={""}
-                                onChange={handleChange}
-                            />
+                                        <label tabIndex={0} htmlFor="woman-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                            <input
+                                                id="woman-gender-identity"
+                                                tabIndex={-1}
+                                                type="radio"
+                                                name="gender_identity"
+                                                required={true}
+                                                value="woman"
+                                                onChange={handleChange}
+                                                checked={false}
+                                                className="sr-only"
+                                            />
+                                            <span className="text-sm"> Woman </span>
+                                        </label>
+
+                                        <label tabIndex={0} htmlFor="other-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                            <input
+                                                id="other-gender-identity"
+                                                tabIndex={-1}
+                                                type="radio"
+                                                name="gender_identity"
+                                                required={true}
+                                                value="other"
+                                                onChange={handleChange}
+                                                checked={false}
+                                                className="sr-only"
+                                            />
+                                            <span className="text-sm"> Other </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-row gap-2 my-2">
+                                    <input
+                                        id="show-gender"
+                                        type="checkbox"
+                                        name="show_gender"
+                                        onChange={handleChange}
+                                        checked={false}
+                                        className="accent-pink-500"
+                                    />
+                                    <label htmlFor="show-gender" className="text-sm">Show gender on my profile</label>
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label className="text-slate-800 font-semibold text-start">Show Me</label>
+                                    <div className="flex flex-row gap-2 my-2">
+                                        <label tabIndex={0} htmlFor="man-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                            <input
+                                                id="man-gender-identity"
+                                                tabIndex={-1}
+                                                type="radio"
+                                                name="gender_identity"
+                                                required={true}
+                                                value="man"
+                                                onChange={handleChange}
+                                                checked={false}
+                                                className="sr-only"
+                                            />
+                                            <span className="text-sm"> Man </span>
+                                        </label>
+
+                                        <label tabIndex={0} htmlFor="woman-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                            <input
+                                                id="woman-gender-identity"
+                                                tabIndex={-1}
+                                                type="radio"
+                                                name="gender_identity"
+                                                required={true}
+                                                value="woman"
+                                                onChange={handleChange}
+                                                checked={false}
+                                                className="sr-only"
+                                            />
+                                            <span className="text-sm"> Woman </span>
+                                        </label>
+
+                                        <label tabIndex={0} htmlFor="everyone-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                            <input
+                                                id="everyone-gender-identity"
+                                                tabIndex={-1}
+                                                type="radio"
+                                                name="gender_identity"
+                                                required={true}
+                                                value="everyone"
+                                                onChange={handleChange}
+                                                checked={false}
+                                                className="sr-only"
+                                            />
+                                            <span className="text-sm"> Everyone </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label className="text-slate-800 font-semibold text-start" htmlFor='about'>
+                                        About Me
+                                    </label>
+                                    <textarea
+                                        id="about"
+                                        typeof="text"
+                                        placeholder="Hi i am....."
+                                        value={""}
+                                        onChange={handleChange}
+                                        className="border border-gray-300 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring focus:ring-pink-500 w-full ease-linear transition-all duration-150 my-2" rows={4}
+                                    />
+                                </div>
+
+                                <div className="flex text-start my-2">
+                                    <Button
+                                        gradient 
+                                        onClick={handleSubmit}
+                                        label="Create Account"
+                                    />
+                                </div>
+
+                            </form>
                         </div>
-
-                        <label>Gender</label>
-                        <div>
+                        <div className="w-2/5 py-36 px-12">
+                            <h2 className="text-3xl font-bold mb-2"> <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Profile</span> Picture</h2>
+                            <div className="border-2 w-10 border-[#f06e52] inline-block mb-2"></div>
                             <input
-                                id="man-gender-identity"
-                                type="radio"
-                                name="gender_identity"
-                                required={true}
-                                value="man"
-                                onChange={handleChange}
-                                checked={false}
+                                id="photo"
+                                type="file"
+                                name="photo"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="mt-2"
                             />
-                            <label htmlFor="man-gender-identity">Man</label>
-
-                            <input
-                                id="woman-gender-identity"
-                                type="radio"
-                                name="gender_identity"
-                                required={true}
-                                value="woman"
-                                onChange={handleChange}
-                                checked={false}
-                            />
-                            <label htmlFor="woman-gender-identity">Woman</label>
-
-                            <input
-                                id="other-gender-identity"
-                                type="radio"
-                                name="gender_identity"
-                                required={true}
-                                value="other"
-                                onChange={handleChange}
-                                checked={false}
-                            />
-                            <label htmlFor="other-gender-identity">Other</label>
+                            {profileImage && (
+                                <Image
+                                    src={URL.createObjectURL(profileImage)}
+                                    alt="Profile Preview"
+                                    className="mt-4 rounded"
+                                    width={200}
+                                    height={200}
+                                />
+                            )}
                         </div>
+                    </div>
 
-                        <label htmlFor="show-gender">Show gender on my profile</label>
-                        <input
-                            id="show-gender"
-                            type="checkbox"
-                            name="show_gender"
-                            onChange={handleChange}
-                            checked={false}
-                        />
+                </div>
 
-                        <label>Show Me</label>
-                        <div>
-                            <input
-                                id="man-gender-interest"
-                                type="radio"
-                                name="gender_interest"
-                                required={true}
-                                value="man"
-                                onChange={handleChange}
-                                checked={false}
-                            />
-                            <label htmlFor="man-gender-interest">Man</label>
-
-                            <input
-                                id="woman-gender-interest"
-                                type="radio"
-                                name="gender_interest"
-                                required={true}
-                                value="woman"
-                                onChange={handleChange}
-                                checked={false}
-                            />
-                            <label htmlFor="woman-gender-interest">Woman</label>
-
-                            <input
-                                id="other-gender-interest"
-                                type="radio"
-                                name="gender_interest"
-                                required={true}
-                                value="everyone"
-                                onChange={handleChange}
-                                checked={false}
-                            />
-                            <label htmlFor="other-gender-interest">Everyone</label>
-                        </div>
-
-                        <label htmlFor="about">About</label>
-                        <input
-                            id="about"
-                            type="text"
-                            name="about"
-                            required={true}
-                            placeholder="Hey bruh.."
-                            value={""}
-                            onChange={handleChange}
-                        />
-                    </section>
-
-                    <section>
-                        <label htmlFor="photo">Profile</label>
-                        <input
-                            id="photo"
-                            type="file"
-                            name="photo"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                        />
-                        {profileImage && (
-                            <img
-                                src={URL.createObjectURL(profileImage)}
-                                alt="Profile Preview"
-                                style={{ maxWidth: '500px', maxHeight: '500px', marginTop: '10px' }}
-                            />
-                        )}
-                    </section>
-                </form>
             </div>
         </>
     )
