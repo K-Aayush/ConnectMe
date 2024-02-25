@@ -1,9 +1,8 @@
 "use client"
 
 import { Header } from '@/components'
-import { Dir } from 'fs'
 import React from 'react'
-import { useState, useRef, useMemo } from 'react'
+import { useState } from 'react'
 import TinderCard from 'react-tinder-card'
 
 
@@ -30,16 +29,8 @@ const db = [
     }
 ]
 
-type Direction = 'left' | 'right' | 'up' | 'down';
-
-interface TinderCardRef {
-    swipe: (dir?: Direction) => Promise<void>;
-    restoreCard: () => Promise<void>;
-}
-
 const Dashboard: React.FC = () => {
-
-    const characters = db
+    
     const [lastDirection, setLastDirection] = useState<string | undefined>()
 
     const swiped = (direction: string, nameToDelete: string) => {
