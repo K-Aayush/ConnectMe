@@ -51,8 +51,8 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="h-[80vh] flex justify-center items-center">
+        <div className="">
+            <div className="flex justify-center mt-[10vh]">
                 {db.map((character) =>
                     <TinderCard
                         className='absolute'
@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
                     >
                         <div
                             style={{ backgroundImage: 'url(' + character.url + ')' }}
-                            className="relative bg-gray-300 max-w-[80vh] w-[300px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
+                            className="relative bg-gray-300 max-w-[85vw] w-[400px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
                             <h3 className="absolute bottom-0 m-2 text-white">
                                 {character.name}
                             </h3>
