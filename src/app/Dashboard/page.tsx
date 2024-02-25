@@ -6,23 +6,23 @@ import TinderCard from 'react-tinder-card'
 const db = [
     {
         name: 'Richard Hendricks',
-        url: './img/richard.jpg'
+        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     },
     {
         name: 'Erlich Bachman',
-        url: './img/erlich.jpg'
+        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     },
     {
         name: 'Monica Hall',
-        url: './img/monica.jpg'
+        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     },
     {
         name: 'Jared Dunn',
-        url: './img/jared.jpg'
+        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     },
     {
         name: 'Dinesh Chugtai',
-        url: './img/dinesh.jpg'
+        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     }
 ]
 
@@ -42,15 +42,27 @@ const Dashboard = () => {
     return (
         <div className="dashboard">
 
-            <div className="swip-container">
-                <div className="card-container">
+            <div className="flex flex-col justify-center items-center">
+                <div className="w-[90vw] max-w-[260px] h-[300px]">
                     {characters.map((character) =>
-                        <TinderCard className='swipe' key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
-                            <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
-                                <h3>{character.name}</h3>
+                        <TinderCard
+                            className="absolute"
+                            key={character.name}
+                            onSwipe={(dir) => swiped(dir, character.name)}
+                            onCardLeftScreen={() => outOfFrame(character.name)}
+                        >
+                            <div
+                                style={{ backgroundImage: 'url(' + character.url + ')' }}
+                                className="relative bg-white w-[80vw] max-w-[260px] h-[300px] shadow-lg rounded-2xl bg-cover bg-center">
+                                <h3 className="absolute bottom-0 m-2 text-white">
+                                    {character.name}
+                                </h3>
                             </div>
                         </TinderCard>
                     )}
+                </div>
+                <div className="w-full flex justify-center text-2xl font-semibold">
+                    {lastDirection ? <p>You Swiped {lastDirection}</p> : <p />}
                 </div>
             </div>
         </div>
