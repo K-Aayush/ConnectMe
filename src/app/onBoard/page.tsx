@@ -54,7 +54,7 @@ const OnBoard = () => {
                                         required={true}
                                         value={""}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-pink-500 my-2"
+                                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                     />
                                 </div>
 
@@ -64,7 +64,7 @@ const OnBoard = () => {
                                         id="Date_of_Birth"
                                         name="datetime"
                                         type="date"
-                                        className="border w-fit p-2 border-gray-300 rounded-md focus:outline-none focus:border-pink-500 my-2"
+                                        className="border w-fit p-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                         required={true}
                                         onChange={handleChange}
                                     />
@@ -196,7 +196,7 @@ const OnBoard = () => {
                                     />
                                 </div>
 
-                                <div className="flex text-start my-2">
+                                <div className="hidden md:flex text-start my-2">
                                     <Button
                                         gradient
                                         onClick={handleSubmit}
@@ -228,11 +228,15 @@ const OnBoard = () => {
                                     <img
                                         src={URL.createObjectURL(profileImage)}
                                         alt="Profile Preview"
-                                        className="rounded w-[150px] h-[150px] object-cover mt-2"
+                                        className="rounded object-cover mt-2"
                                     />
                                 )}
                             </div>
                         </div>
+                        <div className="md:hidden my-4">
+                            <Button gradient onClick={handleSubmit} label="Create Account" />
+                        </div>
+
                     </div>
                 </div>
             </div>
