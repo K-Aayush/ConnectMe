@@ -1,5 +1,6 @@
 "use client"
 
+import { Header } from '@/components'
 import { Dir } from 'fs'
 import React from 'react'
 import { useState, useRef, useMemo } from 'react'
@@ -51,26 +52,29 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="h-[80vh] flex justify-center items-center">
-                {db.map((character) =>
-                    <TinderCard
-                        className='absolute'
-                        key={character.name}
-                        preventSwipe={['up', 'down']}
-                        onSwipe={(dir) => swiped(dir, character.name)}
-                        onCardLeftScreen={() => outOfFrame(character.name)}
-                        flickOnSwipe
-                    >
-                        <div
-                            style={{ backgroundImage: 'url(' + character.url + ')' }}
-                            className="relative bg-gray-300 max-w-[80vh] w-[300px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
-                            <h3 className="absolute bottom-0 m-2 text-white">
-                                {character.name}
-                            </h3>
-                        </div>
-                    </TinderCard>
-                )}
+        <div>
+            <Header />
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="h-[80vh] flex justify-center items-center">
+                    {db.map((character) =>
+                        <TinderCard
+                            className='absolute'
+                            key={character.name}
+                            preventSwipe={['up', 'down']}
+                            onSwipe={(dir) => swiped(dir, character.name)}
+                            onCardLeftScreen={() => outOfFrame(character.name)}
+                            flickOnSwipe
+                        >
+                            <div
+                                style={{ backgroundImage: 'url(' + character.url + ')' }}
+                                className="relative bg-gray-300 max-w-[80vh] w-[300px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
+                                <h3 className="absolute bottom-0 m-2 text-white">
+                                    {character.name}
+                                </h3>
+                            </div>
+                        </TinderCard>
+                    )}
+                </div>
             </div>
         </div>
 
