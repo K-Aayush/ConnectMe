@@ -30,7 +30,7 @@ const db = [
 ]
 
 const Dashboard: React.FC = () => {
-    
+
     const [lastDirection, setLastDirection] = useState<string | undefined>()
 
     const swiped = (direction: string, nameToDelete: string) => {
@@ -45,8 +45,8 @@ const Dashboard: React.FC = () => {
     return (
         <div>
             <Header />
-            <div className="">
-                <div className="flex justify-center mt-[10vh]">
+            <div className="flex flex-col justify-center items-center">
+                <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">
                     {db.map((character) =>
                         <TinderCard
                             className='absolute'
@@ -66,7 +66,11 @@ const Dashboard: React.FC = () => {
                         </TinderCard>
                     )}
                 </div>
+                <div className="w-full flex justify-center text-2xl font-semibold mt-4">
+                    {lastDirection ? <p>You Swiped {lastDirection}</p> : <p />}
+                </div>
             </div>
+
         </div>
 
     )
