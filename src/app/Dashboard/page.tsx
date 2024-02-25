@@ -1,7 +1,10 @@
 "use client"
 
-import { useState } from 'react'
+import { Dir } from 'fs'
+import React from 'react'
+import { useState, useRef, useMemo } from 'react'
 import TinderCard from 'react-tinder-card'
+
 
 const db = [
     {
@@ -26,12 +29,19 @@ const db = [
     }
 ]
 
-const Dashboard = () => {
+type Direction = 'left' | 'right' | 'up' | 'down';
+
+interface TinderCardRef {
+    swipe: (dir?: Direction) => Promise<void>;
+    restoreCard: () => Promise<void>;
+}
+
+const Dashboard: React.FC = () => {
 
     const characters = db
-    const [lastDirection, setLastDirection] = useState()
+    const [lastDirection, setLastDirection] = useState<string | undefined>()
 
-    const swiped = (direction: any, nameToDelete: string) => {
+    const swiped = (direction: string, nameToDelete: string) => {
         console.log('removing: ' + nameToDelete)
         setLastDirection(direction)
     }
@@ -39,33 +49,31 @@ const Dashboard = () => {
     const outOfFrame = (name: string) => {
         console.log(name + ' left the screen!')
     }
-    return (
-        <div className="dashboard">
 
-            <div className="flex flex-col justify-center items-center">
-                <div className="w-[90vw] max-w-[260px] h-[300px]">
-                    {characters.map((character) =>
-                        <TinderCard
-                            className="absolute"
-                            key={character.name}
-                            onSwipe={(dir) => swiped(dir, character.name)}
-                            onCardLeftScreen={() => outOfFrame(character.name)}
-                        >
-                            <div
-                                style={{ backgroundImage: 'url(' + character.url + ')' }}
-                                className="relative bg-white w-[80vw] max-w-[260px] h-[300px] shadow-lg rounded-2xl bg-cover bg-center">
-                                <h3 className="absolute bottom-0 m-2 text-white">
-                                    {character.name}
-                                </h3>
-                            </div>
-                        </TinderCard>
-                    )}
-                </div>
-                <div className="w-full flex justify-center text-2xl font-semibold">
-                    {lastDirection ? <p>You Swiped {lastDirection}</p> : <p />}
-                </div>
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="h-[80vh] flex justify-center items-center">
+                {db.map((character) =>
+                    <TinderCard
+                        className='absolute'
+                        key={character.name}
+                        preventSwipe={['up', 'down']}
+                        onSwipe={(dir) => swiped(dir, character.name)}
+                        onCardLeftScreen={() => outOfFrame(character.name)}
+                        flickOnSwipe
+                    >
+                        <div
+                            style={{ backgroundImage: 'url(' + character.url + ')' }}
+                            className="relative bg-gray-300 max-w-[80vh] w-[300px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
+                            <h3 className="absolute bottom-0 m-2 text-white">
+                                {character.name}
+                            </h3>
+                        </div>
+                    </TinderCard>
+                )}
             </div>
         </div>
+
     )
 }
 
