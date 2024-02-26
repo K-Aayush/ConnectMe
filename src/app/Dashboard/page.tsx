@@ -2,8 +2,10 @@
 
 import { Header } from '@/components'
 import React from 'react'
-import { useState } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import TinderCard from 'react-tinder-card'
+import { IoHeartOutline } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 
 
 const db = [
@@ -29,32 +31,67 @@ const db = [
     }
 ]
 
+interface TinderCardRef {
+    swipe: (dir?: Direction) => Promise<void>;
+    restoreCard: () => Promise<void>;
+}
+
+type Direction = 'left' | 'right' | 'up' | 'down';
+
 const Dashboard: React.FC = () => {
 
-    const [lastDirection, setLastDirection] = useState<string | undefined>()
+    const [lastDirection, setLastDirection] = useState<string | undefined>();
+    const [currentIndex, setCurrentIndex] = useState<number>(db.length - 1);
 
-    const swiped = (direction: string, nameToDelete: string) => {
+    const currentIndexRef = useRef(currentIndex);
+
+    const childRefs = useMemo(
+        () =>
+            Array(db.length)
+                .fill(0)
+                .map((i) => React.createRef<TinderCardRef>()),
+        []
+    )
+
+    const updateCurrentIndex = (val: number) => {
+        setCurrentIndex(val)
+        currentIndexRef.current = val
+    }
+
+    const canSwipe = currentIndex >= 0
+
+    const swiped = (direction: Direction, nameToDelete: string, index: number) => {
         console.log('removing: ' + nameToDelete)
-        setLastDirection(direction)
+        setLastDirection(direction);
+        updateCurrentIndex(index - 1);
     }
 
-    const outOfFrame = (name: string) => {
-        console.log(name + ' left the screen!')
+    const outOfFrame = (name: string, index: number) => {
+        console.log(name + ' left the screen!', currentIndexRef.current)
     }
+
+    const swipe = async (dir: Direction) => {
+        if (canSwipe && currentIndex < db.length) {
+            await childRefs[currentIndex].current?.swipe(dir)
+        }
+    }
+
 
     return (
         <div>
             <Header />
             <div className="flex flex-col justify-center items-center">
                 <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">
-                    {db.map((character) =>
+                    {db.map((character, index) =>
                         <TinderCard
+                            ref={childRefs[index]}
                             className='absolute'
                             key={character.name}
+                            swipeRequirementType='position'
+                            swipeThreshold={100}
                             preventSwipe={['up', 'down']}
-                            onSwipe={(dir) => swiped(dir, character.name)}
-                            onCardLeftScreen={() => outOfFrame(character.name)}
-                            flickOnSwipe
+                            onSwipe={(dir) => swiped(dir, character.name, index)}
+                            onCardLeftScreen={() => outOfFrame(character.name, index)}
                         >
                             <div
                                 style={{ backgroundImage: 'url(' + character.url + ')' }}
@@ -66,11 +103,24 @@ const Dashboard: React.FC = () => {
                         </TinderCard>
                     )}
                 </div>
+                <div className="w-full flex justify-center mt-4">
+                    <button
+                        className="mr-4 p-2 text-red-500 hover:bg-gray-100 rounded-full"
+                        onClick={() => swipe('left')}
+                    >
+                        <RxCross1 size={50} />
+                    </button>
+                    <button
+                        className="p-2 text-green-500 rounded-full hover:bg-gray-100"
+                        onClick={() => swipe('right')}
+                    >
+                        <IoHeartOutline size={50} />
+                    </button>
+                </div>
                 <div className="w-full flex justify-center text-2xl font-semibold mt-4">
                     {lastDirection ? <p>You Swiped {lastDirection}</p> : <p />}
                 </div>
             </div>
-
         </div>
 
     )
