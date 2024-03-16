@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Button } from "./index";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // Defining the props for the AuthModal component
 interface AuthModalProps {
@@ -15,10 +17,12 @@ interface AuthModalProps {
 // AuthModal component definition
 const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps) => {
 
-    const [email, setEmail] = useState<string | null>(null);
-    const [password, setPassword] = useState<string | null>(null);
-    const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+    const [email, setEmail] = useState<string | null>("");
+    const [password, setPassword] = useState<string | null>("");
+    const [confirmPassword, setConfirmPassword] = useState<string | null>("");
     const [error, setError] = useState<string | null>(null);
+
+    let navigate = useRouter();
 
     if (!isVisible) return null;
 
@@ -31,12 +35,27 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
     };
 
     // Function to handle form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            
+            if (isSignUp && (password !== confirmPassword)) {
+                setError("password not matched!");
+                return
+            }
+
+            const response = await axios.post("http://localhost:8000/signup", { email, password })
+
+            if (response.status === 201) {
+                navigate.push('/onBoard');
+            } else if (response.status === 409) {
+                setError("User already exists.");
+            } else {
+                setError("Something went wrong. Please try again later.");
+            }
+
         } catch (error) {
-            
+            console.error("Error occurred during signup:", error);
+            setError("Something went wrong. Please try again later.");
         }
 
 
@@ -80,7 +99,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         />
 
-                        {isSignUp &&<input
+                        {isSignUp && <input
                             className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
                             type="password"
                             id="password-check"
@@ -94,19 +113,19 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                             custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
                             label="Create"
                             onClick={() => { }}
-                        /> :  
-                        <Button
-                            custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
-                            label="Log In"
-                            onClick={() => { }}
-                        />
+                        /> :
+                            <Button
+                                custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
+                                label="Log In"
+                                onClick={() => { }}
+                            />
                         }
                         <hr />
                     </form>
 
-                     <p className="text-black text-xl">
+                    <p className="text-black text-xl">
                         Find Your Soulmate
-                    </p> 
+                    </p>
                 </div>
                 <div
                     onClick={handleOnClose}
