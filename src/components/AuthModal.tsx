@@ -45,14 +45,16 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                 return
             }
 
-            const response = await axios.post("http://localhost:8000/signup", { email, password })
+            const response = await axios.post(`http://localhost:8000/${isSignUp ? 'signup' : 'login'}`, { email, password })
 
             setCookie('Email' as 'user', response.data.email)
             setCookie('userId' as 'user', response.data.userId)
             setCookie('AuthToken' as 'user', response.data.token)
 
-            if (response.status === 201) {
+            if (response.status === 201 && isSignUp) {
                 navigate.push('/onBoard');
+            } else if (response.status === 201 && !isSignUp) {
+                navigate.push('/Dashboard');
             } else if (response.status === 409) {
                 setError("User already exists.");
             } else {
