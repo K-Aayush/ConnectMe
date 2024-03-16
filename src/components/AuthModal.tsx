@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "./index";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
 
 // Defining the props for the AuthModal component
 interface AuthModalProps {
@@ -21,6 +22,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
     const [password, setPassword] = useState<string | null>("");
     const [confirmPassword, setConfirmPassword] = useState<string | null>("");
     const [error, setError] = useState<string | null>(null);
+    const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
     let navigate = useRouter();
 
@@ -45,6 +47,10 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
 
             const response = await axios.post("http://localhost:8000/signup", { email, password })
 
+            setCookie('Email' as 'user', response.data.email)
+            setCookie('userId' as 'user', response.data.userId)
+            setCookie('AuthToken' as 'user', response.data.token)
+
             if (response.status === 201) {
                 navigate.push('/onBoard');
             } else if (response.status === 409) {
@@ -60,7 +66,6 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
 
 
     }
-
 
 
     return (
