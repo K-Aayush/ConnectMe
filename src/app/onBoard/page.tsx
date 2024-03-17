@@ -1,19 +1,52 @@
 'use client'
 
 import { Button } from '@/components';
-import Image from 'next/image';
+import { useCookies } from "react-cookie";
 import { useState } from 'react'
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 
 const OnBoard = () => {
     const [profileImage, setProfileImage] = useState<File | null>(null);
+    const [cookies, setCookie, removeCookie]:any = useCookies(['user']);
+    const [formData, setFormData] = useState({
+        "email": cookies.email,
+        "first_name": "",
+        "dob": "",
+        "gender_identity": "man",
+        "show_gender": true,
+        "gender_interest": "woman",
+        "photos": [],
+        "about": "",
+        "matches": []
+    })
 
-    const handleSubmit = () => {
+    let navigate = useRouter();
+
+    const handleSubmit = async (e: any) => {
         console.log('submit')
+        e.preventDefault();
+
+        try {
+            const response = await axios.put(`http://localhost:8000/user/${formData.email}`, { formData })
+
+            if (response.status === 200) {
+                navigate.push('/Dashboard');
+            }
+        } catch(error) {
+            console.log(error)
+        }
     }
 
-    const handleChange = () => {
-        console.log('change')
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value 
+        }));
+        console.log(formData,"Form Data")
     }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +85,7 @@ const OnBoard = () => {
                                         name="first_name"
                                         placeholder="John"
                                         required={true}
-                                        value={""}
+                                        value={formData.first_name}
                                         onChange={handleChange}
                                         className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                     />
@@ -62,8 +95,9 @@ const OnBoard = () => {
                                     <label className="text-slate-800 font-semibold text-start">Date of Birth</label>
                                     <input
                                         id="Date_of_Birth"
-                                        name="datetime"
+                                        name="dob"
                                         type="date"
+                                        value={formData.dob}
                                         className="border w-fit p-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                         required={true}
                                         onChange={handleChange}
@@ -79,10 +113,9 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_identity"
-                                                required={true}
                                                 value="man"
+                                                checked={formData.gender_identity === 'man'}
                                                 onChange={handleChange}
-                                                checked={false}
                                                 className="sr-only"
                                             />
                                             <span className="text-sm"> Man </span>
@@ -94,10 +127,9 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_identity"
-                                                required={true}
+                                                checked={formData.gender_identity === 'woman'}
                                                 value="woman"
                                                 onChange={handleChange}
-                                                checked={false}
                                                 className="sr-only"
                                             />
                                             <span className="text-sm"> Woman </span>
@@ -109,10 +141,9 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_identity"
-                                                required={true}
+                                                checked={formData.gender_identity === 'other'}
                                                 value="other"
                                                 onChange={handleChange}
-                                                checked={false}
                                                 className="sr-only"
                                             />
                                             <span className="text-sm"> Other </span>
@@ -126,7 +157,6 @@ const OnBoard = () => {
                                         type="checkbox"
                                         name="show_gender"
                                         onChange={handleChange}
-                                        checked={false}
                                         className="accent-pink-500"
                                     />
                                     <label htmlFor="show-gender" className="text-sm">Show gender on my profile</label>
@@ -135,46 +165,43 @@ const OnBoard = () => {
                                 <div className="flex flex-col">
                                     <label className="text-slate-800 font-semibold text-start">Show Me</label>
                                     <div className="flex flex-row gap-2 my-2">
-                                        <label tabIndex={0} htmlFor="man-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                        <label tabIndex={0} htmlFor="man-gender-interest" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
                                             <input
-                                                id="man-gender-identity"
+                                                id="man-gender-interest"
                                                 tabIndex={-1}
                                                 type="radio"
-                                                name="gender_identity"
-                                                required={true}
+                                                name="gender_interest"
+                                                checked={formData.gender_interest === 'man'}
                                                 value="man"
                                                 onChange={handleChange}
-                                                checked={false}
                                                 className="sr-only"
                                             />
                                             <span className="text-sm"> Man </span>
                                         </label>
 
-                                        <label tabIndex={0} htmlFor="woman-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                        <label tabIndex={0} htmlFor="woman-gender-interest" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
                                             <input
-                                                id="woman-gender-identity"
+                                                id="woman-gender-interest"
                                                 tabIndex={-1}
                                                 type="radio"
-                                                name="gender_identity"
-                                                required={true}
+                                                name="gender_interest"
+                                                checked={formData.gender_interest === 'woman'}
                                                 value="woman"
                                                 onChange={handleChange}
-                                                checked={false}
                                                 className="sr-only"
                                             />
                                             <span className="text-sm"> Woman </span>
                                         </label>
 
-                                        <label tabIndex={0} htmlFor="everyone-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                                        <label tabIndex={0} htmlFor="everyone-gender-interest" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
                                             <input
-                                                id="everyone-gender-identity"
+                                                id="everyone-gender-interest"
                                                 tabIndex={-1}
                                                 type="radio"
-                                                name="gender_identity"
-                                                required={true}
+                                                name="gender_interest"
+                                                checked={formData.gender_interest === 'everyone'}
                                                 value="everyone"
                                                 onChange={handleChange}
-                                                checked={false}
                                                 className="sr-only"
                                             />
                                             <span className="text-sm"> Everyone </span>
@@ -189,10 +216,12 @@ const OnBoard = () => {
                                     <textarea
                                         id="about"
                                         typeof="text"
+                                        name="about"
+                                        rows={4}
                                         placeholder="Hi i am....."
-                                        value={""}
+                                        value={formData.about}
                                         onChange={handleChange}
-                                        className="border border-gray-300 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring focus:ring-pink-500 w-full ease-linear transition-all duration-150 my-2" rows={4}
+                                        className="border border-gray-300 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring focus:ring-pink-500 w-full ease-linear transition-all duration-150 my-2"
                                     />
                                 </div>
 
@@ -218,6 +247,7 @@ const OnBoard = () => {
                                     id="photo"
                                     type="file"
                                     name="photo"
+                                    value={formData.photos}
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="mt-2 items-start"
