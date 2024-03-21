@@ -11,13 +11,13 @@ const OnBoard = () => {
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const [cookies, setCookie, removeCookie]:any = useCookies(['user']);
     const [formData, setFormData] = useState({
-        "email": cookies.email,
+        "user_id": cookies.user_id,
         "first_name": "",
         "dob": "",
         "gender_identity": "man",
         "show_gender": true,
         "gender_interest": "woman",
-        "photos": [],
+        "photos": "",
         "about": "",
         "matches": []
     })
@@ -29,7 +29,7 @@ const OnBoard = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.put(`http://localhost:8000/user/${formData.email}`, { formData })
+            const response = await axios.put(`http://localhost:8000/user/${formData.user_id}`, { formData })
 
             if (response.status === 200) {
                 navigate.push('/Dashboard');

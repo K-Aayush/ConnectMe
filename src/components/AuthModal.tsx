@@ -48,6 +48,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
             const response = await axios.post(`http://localhost:8000/${isSignUp ? 'signup' : 'login'}`, { email, password })
             
             setCookie('email' as 'user', response.data.email)
+            setCookie('user_id' as 'user', response.data.user_id)
             setCookie('AuthToken' as 'user', response.data.token)
 
             if (response.status === 201 && isSignUp) {
