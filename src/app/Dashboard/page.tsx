@@ -2,10 +2,12 @@
 
 import { Header } from '@/components'
 import React from 'react'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import TinderCard from 'react-tinder-card'
 import { IoHeartOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 
 const db = [
@@ -42,6 +44,27 @@ const Dashboard: React.FC = () => {
 
     const [lastDirection, setLastDirection] = useState<string | undefined>();
     const [currentIndex, setCurrentIndex] = useState<number>(db.length - 1);
+    const [user, setUser] = useState(null);
+    const [cookies, setCookie, removeCookie]:any = useCookies(['user']);
+
+    const userId = cookies.user_id
+
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const response = await axios.get("http://localhost:8000/user", {
+                    params: { userId }
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getUser();
+    }, []);
+
+    console.log(user)
 
     const currentIndexRef = useRef(currentIndex);
 
@@ -75,6 +98,7 @@ const Dashboard: React.FC = () => {
             await childRefs[currentIndex].current?.swipe(dir)
         }
     }
+
 
 
     return (
