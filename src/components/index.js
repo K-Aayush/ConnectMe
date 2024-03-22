@@ -4,6 +4,7 @@ import NavBar from "./NavBar";
 import AuthModal from "./AuthModal";
 import Header from "./Header";
 import ChatMenu from "./ChatMenu";
+import Menu from "./Menu";
 
 export {
     Button,
@@ -11,5 +12,6 @@ export {
     NavBar,
     AuthModal,
     Header,
-    ChatMenu
+    ChatMenu,
+    Menu
 }

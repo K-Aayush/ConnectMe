@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { IoMenuSharp } from "react-icons/io5";
-import { ChatMenu } from '.';
+import { ChatMenu, Menu } from '.';
 
 const Header = () => {
     return (
@@ -14,9 +13,7 @@ const Header = () => {
                 alt='Logo'
             />
 
-            <div className="cursor-pointer p-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full">
-                <IoMenuSharp size={30} />
-            </div>
+            <Menu />
         </div>
     )
 }
