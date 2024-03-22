@@ -10,29 +10,6 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 
 
-const db = [
-    {
-        name: 'Richard Hendricks',
-        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    },
-    {
-        name: 'Erlich Bachman',
-        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    },
-    {
-        name: 'Monica Hall',
-        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    },
-    {
-        name: 'Jared Dunn',
-        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    },
-    {
-        name: 'Dinesh Chugtai',
-        url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    }
-]
-
 interface TinderCardRef {
     swipe: (dir?: Direction) => Promise<void>;
     restoreCard: () => Promise<void>;
@@ -43,85 +20,116 @@ type Direction = 'left' | 'right' | 'up' | 'down';
 const Dashboard: React.FC = () => {
 
     const [lastDirection, setLastDirection] = useState<string | undefined>();
-    const [currentIndex, setCurrentIndex] = useState<number>(db.length - 1);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [user, setUser] = useState(null);
+    const [genderedUsers, setGenderedUsers] = useState(null);
     const [cookies, setCookie, removeCookie]:any = useCookies(['user']);
 
     const userId = cookies.user_id
 
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/user", {
-                    params: { userId }
-                });
-                setUser(response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
 
+    const getGenderedUsers = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/gendered-users", {
+                params: { gender: user?.gender_interest }
+            });
+            setGenderedUsers(response.data);
+            console.log(genderedUsers)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getUser = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/user", {
+                params: { userId }
+            });
+            setUser(response.data);
+            console.log(response.data);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+    useEffect(() => {     
         getUser();
     }, []);
 
-    console.log(user)
+    useEffect(() => {     
+        getGenderedUsers();
+    }, [user]);
 
-    const currentIndexRef = useRef(currentIndex);
+    
 
-    const childRefs = useMemo(
-        () =>
-            Array(db.length)
-                .fill(0)
-                .map((i) => React.createRef<TinderCardRef>()),
-        []
-    )
+    console.log('genderuser', genderedUsers);
 
-    const updateCurrentIndex = (val: number) => {
-        setCurrentIndex(val)
-        currentIndexRef.current = val
+    // const currentIndexRef = useRef(currentIndex);
+
+    // const childRefs = useMemo(
+    //     () =>
+    //         Array(db.length)
+    //             .fill(0)
+    //             .map((i) => React.createRef<TinderCardRef>()),
+    //     []
+    // )
+
+    // const updateCurrentIndex = (val: number) => {
+    //     setCurrentIndex(val)
+    //     currentIndexRef.current = val
+    // }
+
+    // const canSwipe = currentIndex >= 0
+
+    const outOfFrame = (name: string) => {
+        console.log(name + ' left the screen!')
     }
 
-    const canSwipe = currentIndex >= 0
-
-    const swiped = (direction: Direction, nameToDelete: string, index: number) => {
-        console.log('removing: ' + nameToDelete)
-        setLastDirection(direction);
-        updateCurrentIndex(index - 1);
-    }
-
-    const outOfFrame = (name: string, index: number) => {
-        console.log(name + ' left the screen!', currentIndexRef.current)
-    }
-
-    const swipe = async (dir: Direction) => {
-        if (canSwipe && currentIndex < db.length) {
-            await childRefs[currentIndex].current?.swipe(dir)
+    const swiped = (dir: Direction, nameToDelete: string) => {
+        console.log('removing: ' + nameToDelete);
+        setLastDirection(dir);
+    
+        if (dir === 'left') {
+            console.log('Swiped left on', nameToDelete);
+        } else if (dir === 'right') {
+            console.log('Swiped right on', nameToDelete);
         }
-    }
+    
+        setCurrentIndex(prevIndex => prevIndex + 1);
+    };
+
+    // const swipe = async (dir: Direction) => {
+    //     if (currentIndex < genderedUsers.length) {
+    //         swiped(dir, genderedUsers[currentIndex].name);
+    //     }
+    // };
 
 
 
     return (
+        <>
+        {user &&
         <div>
             <Header />
             <div className="flex flex-col justify-center items-center">
                 <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">
-                    {db.map((character, index) =>
+                    {genderedUsers?.map((genderedUser) =>
                         <TinderCard
-                            ref={childRefs[index]}
-                            className='absolute'
-                            key={character.name}
+                            // ref={childRefs[index]}
+                            className='absolute overflow-hidden'
+                            key={genderedUser.name}
                             swipeRequirementType='position'
-                            swipeThreshold={100}
+                            swipeThreshold={30}
                             preventSwipe={['up', 'down']}
-                            onSwipe={(dir) => swiped(dir, character.name, index)}
-                            onCardLeftScreen={() => outOfFrame(character.name, index)}
+                            onSwipe={(dir) => swiped(dir as Direction, genderedUser.first_name)}
+                            onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}
                         >
                             <div
-                                style={{ backgroundImage: 'url(' + character.url + ')' }}
+                                style={{ backgroundImage: 'url(' + genderedUser.url + ')' }}
                                 className="relative bg-gray-300 max-w-[85vw] w-[400px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
-                                <h3 className="absolute bottom-0 m-2 text-white">
-                                    {character.name}
+                                <h3 className="absolute bottom-0 m-2 text-black">
+                                    {genderedUser.first_name}
                                 </h3>
                             </div>
                         </TinderCard>
@@ -145,8 +153,8 @@ const Dashboard: React.FC = () => {
                     {lastDirection ? <p>You Swiped {lastDirection}</p> : <p />}
                 </div>
             </div>
-        </div>
-
+        </div>}
+        </>
     )
 }
 
