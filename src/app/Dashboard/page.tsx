@@ -87,12 +87,18 @@ const Dashboard: React.FC = () => {
 
     };
 
+    const matchedUserIds = (user?.matches || []).map(({ user_id }: any) => user_id).concat(userId);
+
+    const filteredGenderedUsers = genderedUsers?.filter(
+        genderedUser => !matchedUserIds.includes(genderedUser.user_id)
+    )
+
     // const swipe = async (dir: Direction) => {
     //     if (currentIndex < genderedUsers.length) {
     //         swiped(dir, genderedUsers[currentIndex].name);
     //     }
     // };
-
+ 
 
 
     return (
@@ -102,8 +108,9 @@ const Dashboard: React.FC = () => {
                     <Header />
                     <div className="flex flex-col justify-center items-center">
                         <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">
-                            {genderedUsers?.map((genderedUser: any) =>
+                            {filteredGenderedUsers?.map((genderedUser: any) =>
                                 <TinderCard
+                                className='overflow-hidden'
                                     key={genderedUser.first_name}
                                     swipeRequirementType='position'
                                     swipeThreshold={30}
