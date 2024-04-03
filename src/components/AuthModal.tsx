@@ -47,8 +47,9 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
 
             const response = await axios.post(`http://localhost:8000/${isSignUp ? 'signup' : 'login'}`, { email, password })
             
-            setCookie('user_id' as 'user', response.data.user_id)
+            setCookie('user_id' as 'user', response.data.userId)
             setCookie('AuthToken' as 'user', response.data.token)
+            console.log(response)
 
             if (response.status === 201 && isSignUp) {
                 navigate.push('/onBoard');
