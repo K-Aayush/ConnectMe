@@ -5,6 +5,8 @@ import AuthModal from "./AuthModal";
 import Header from "./Header";
 import ChatMenu from "./ChatMenu";
 import Menu from "./Menu";
+import ChatDisplay from "./ChatDisplay";
+import MatchesDisplay from "./MatchesDisplay";
 
 export {
     Button,
@@ -13,5 +15,7 @@ export {
     AuthModal,
     Header,
     ChatMenu,
-    Menu
+    Menu,
+    ChatDisplay,
+    MatchesDisplay
 }

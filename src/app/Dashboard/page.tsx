@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
     //         swiped(dir, genderedUsers[currentIndex].name);
     //     }
     // };
- 
+
 
 
     return (
@@ -110,7 +110,7 @@ const Dashboard: React.FC = () => {
                         <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">
                             {filteredGenderedUsers?.map((genderedUser: any) =>
                                 <TinderCard
-                                className='overflow-hidden'
+                                    className='absolute'
                                     key={genderedUser.first_name}
                                     swipeRequirementType='position'
                                     swipeThreshold={30}
