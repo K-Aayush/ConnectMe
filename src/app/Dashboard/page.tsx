@@ -28,7 +28,6 @@ const Dashboard: React.FC = () => {
                 params: { gender: user?.gender_interest }
             });
             setGenderedUsers(response.data);
-            console.log(genderedUsers)
         } catch (error) {
             console.log(error)
         }
@@ -40,7 +39,6 @@ const Dashboard: React.FC = () => {
                 params: { userId }
             });
             setUser(response.data);
-            console.log(response.data);
 
         } catch (error) {
             console.log(error);

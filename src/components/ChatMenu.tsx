@@ -7,6 +7,7 @@ import { MatchesDisplay, ChatDisplay } from '.';
 
 const ChatMenu = ({ user }: any) => {
     const [messageMenu, setMessageMenu] = useState<boolean>(false)
+    const [clickedUser, setClickedUser] = useState(null)
 
     return (
         <div>
@@ -25,17 +26,17 @@ const ChatMenu = ({ user }: any) => {
                             <img src="\Image\dating.jpg" alt="" className="rounded-full w-[40px] h-[40px] overflow-hidden" />
                             <h3 className="text-2xl font-semibold">{user.first_name}</h3>
                         </div>
- 
+
                     </div>
 
                     <div className="flex gap-2 mb-2 mx-auto">
-                        <button className="border-b-2 border-red-600 text-lg m-[2px] p-[10px] disabled:border-gray-400">Matches</button>
-                        <button className="border-b-2 border-red-600 text-lg m-[2px] p-[10px] disabled:border-gray-400">Chat</button>
+                        <button className="border-b-2 border-red-600 text-lg m-[2px] p-[10px] disabled:border-gray-400" onClick={() => {setClickedUser(null)}}>Matches</button>
+                        <button className="border-b-2 border-red-600 text-lg m-[2px] p-[10px] disabled:border-gray-400" disabled={!clickedUser}>Chat</button>
                     </div>
 
-                    <MatchesDisplay matches={user.matches} />
+                    {!clickedUser && <MatchesDisplay matches={user.matches} setClickedUser={setClickedUser} />}
 
-                    <ChatDisplay />
+                    {clickedUser && <ChatDisplay user={user} clickedUser={clickedUser}/>}
                 </div>
             </div>
         </div>
