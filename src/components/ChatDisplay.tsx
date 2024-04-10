@@ -64,7 +64,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
     return (
         <>
             <Chat acendingOrderMessages={acendingOrderMessages}/>
-            <ChatInput />
+            <ChatInput user={user} clickedUser={clickedUser} getUserMessages={getUserMessages} getClickedUserMessages={getClickedUserMessages} />
         </>
     )
 }
