@@ -5,7 +5,7 @@ import { LuMessagesSquare } from "react-icons/lu";
 import { RxCross1 } from "react-icons/rx";
 import { MatchesDisplay, ChatDisplay } from '.';
 
-const ChatMenu = () => {
+const ChatMenu = ({ user }: any) => {
     const [messageMenu, setMessageMenu] = useState<boolean>(false)
 
     return (
@@ -22,7 +22,7 @@ const ChatMenu = () => {
                         </div>
                         <div className="flex items-center text-center justify-center mb-6 gap-4">
                             <img src="\Image\dating.jpg" alt="" className="rounded-full w-[40px] h-[40px] overflow-hidden" />
-                            <h3 className="text-2xl font-semibold">Username</h3>
+                            <h3 className="text-2xl font-semibold">{user.first_name}</h3>
                         </div>
                     </div>
                     <div className="flex gap-2 mb-2 mx-auto">

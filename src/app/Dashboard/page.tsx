@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
         <>
             {user &&
                 <div>
-                    <Header />
+                    <Header user={user} />
                     <div className="flex flex-col justify-center items-center">
                         <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">
                             {filteredGenderedUsers?.map((genderedUser: any) =>
@@ -119,7 +119,7 @@ const Dashboard: React.FC = () => {
                                     onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}
                                 >
                                     <div
-                                        style={{ backgroundImage: 'url(' + genderedUser.url + ')' }}
+                                        style={{ backgroundImage: 'url(' + genderedUser.photo + ')' }}
                                         className="relative bg-gray-300 max-w-[85vw] w-[400px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
                                         <h3 className="absolute bottom-0 m-2 text-black">
                                             {genderedUser.first_name}
