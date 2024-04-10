@@ -9,7 +9,7 @@ const Chat = ({ acendingOrderMessages }: any) => {
           <div key={index} className="bg-gray-300 rounded-2xl p-4 mt-4">
             <div className="flex items-center mb-2">
               {message.img && (
-                <img src={message.img} alt="Profile Picture" className="w-[40px] h-[40px] rounded-full mr-2" />
+                <img src='' alt="Profile Picture" className="mr-2 w-10 h-10 rounded-full" />
               )}
               <p className="font-semibold">{message.name}</p>
               <p className="text-gray-500 text-sm ml-2">{formatDate(message.timestamp)}</p>

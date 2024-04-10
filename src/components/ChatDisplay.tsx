@@ -7,8 +7,8 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
 
     const userId = user?.user_id
     const clickedUserId = clickedUser?.user_id
-    const [userMessages, setUserMessages] = useState(null)
-    const [clickedUserMessages, setClickedUserMessages] = useState(null)
+    const [userMessages, setUserMessages] = useState<any>(null)
+    const [clickedUserMessages, setClickedUserMessages] = useState<any>(null)
 
     const getUserMessages = async () => {
         try {
@@ -41,7 +41,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
 
     console.log('usermessage', userMessages)
 
-    userMessages?.forEach(message => {
+    userMessages?.forEach((message: { message: any; timestamp: any }) => {
         const formattedmessage:any = {}
         formattedmessage["name"] = user?.first_name
         formattedmessage["img"] = user?.photo
@@ -50,7 +50,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
         messages.push(formattedmessage)
     })
 
-    clickedUserMessages?.forEach(message => {
+    clickedUserMessages?.forEach((message: { message: any; timestamp: any }) => {
         const formattedmessage:any = {}
         formattedmessage["name"] = clickedUser?.first_name
         formattedmessage["img"] = clickedUser?.photo
