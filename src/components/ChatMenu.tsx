@@ -20,17 +20,20 @@ const ChatMenu = ({ user }: any) => {
                         <div onClick={() => setMessageMenu(false)} className="text-3xl cursor-pointer rounded-full hover:bg-gray-100 w-fit p-3 flex justify-end">
                             <RxCross1 />
                         </div>
+
                         <div className="flex items-center text-center justify-center mb-6 gap-4">
                             <img src="\Image\dating.jpg" alt="" className="rounded-full w-[40px] h-[40px] overflow-hidden" />
                             <h3 className="text-2xl font-semibold">{user.first_name}</h3>
                         </div>
+ 
                     </div>
+
                     <div className="flex gap-2 mb-2 mx-auto">
                         <button className="border-b-2 border-red-600 text-lg m-[2px] p-[10px] disabled:border-gray-400">Matches</button>
                         <button className="border-b-2 border-red-600 text-lg m-[2px] p-[10px] disabled:border-gray-400">Chat</button>
                     </div>
 
-                    <MatchesDisplay />
+                    <MatchesDisplay matches={user.matches} />
 
                     <ChatDisplay />
                 </div>
