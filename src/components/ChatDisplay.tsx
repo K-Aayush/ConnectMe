@@ -4,10 +4,11 @@ import { Chat, ChatInput } from '.'
 import axios from 'axios'
 
 const ChatDisplay = ({ user, clickedUser }: any) => {
-    
+
     const userId = user?.user_id
     const clickedUserId = clickedUser?.user_id
     const [userMessages, setUserMessages] = useState(null)
+    const [clickedUserMessages, setClickedUserMessages] = useState(null)
 
     const getUserMessages = async () => {
         try {
@@ -20,15 +21,49 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
         }
     }
 
+    const getClickedUserMessages = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/messages', {
+                params: { userId: clickedUserId, correspondingUserId: userId }
+            })
+            setClickedUserMessages(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         getUserMessages()
-    }, [userMessages])
+        getClickedUserMessages()
+    }, [])
 
-    console.log(userMessages, "usermessage")
+    const messages: any = []
+
+    console.log('usermessage', userMessages)
+
+    userMessages?.forEach(message => {
+        const formattedmessage:any = {}
+        formattedmessage["name"] = user?.first_name
+        formattedmessage["img"] = user?.photo
+        formattedmessage["message"] = message?.message
+        formattedmessage["timestamp"] = message?.timestamp
+        messages.push(formattedmessage)
+    })
+
+    clickedUserMessages?.forEach(message => {
+        const formattedmessage:any = {}
+        formattedmessage["name"] = clickedUser?.first_name
+        formattedmessage["img"] = clickedUser?.photo
+        formattedmessage["message"] = message?.message
+        formattedmessage["timestamp"] = message?.timestamp
+        messages.push(formattedmessage)
+    })
+
+    const acendingOrderMessages = messages?.sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
 
     return (
         <>
-            <Chat />
+            <Chat acendingOrderMessages={acendingOrderMessages}/>
             <ChatInput />
         </>
     )
