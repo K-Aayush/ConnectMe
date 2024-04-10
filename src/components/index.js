@@ -7,6 +7,9 @@ import ChatMenu from "./ChatMenu";
 import Menu from "./Menu";
 import ChatDisplay from "./ChatDisplay";
 import MatchesDisplay from "./MatchesDisplay";
+import Chat from "./Chat";
+import ChatInput from "./ChatInput";
+
 
 export {
     Button,
@@ -17,5 +20,7 @@ export {
     ChatMenu,
     Menu,
     ChatDisplay,
-    MatchesDisplay
+    MatchesDisplay,
+    Chat,
+    ChatInput
 }
