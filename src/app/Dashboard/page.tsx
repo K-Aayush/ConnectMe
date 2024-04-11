@@ -8,6 +8,7 @@ import { IoHeartOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
+import { useRouter } from "next/navigation";
 
 
 type Direction = 'left' | 'right' | 'up' | 'down';
@@ -18,6 +19,8 @@ const Dashboard: React.FC = () => {
     const [user, setUser] = useState(null);
     const [genderedUsers, setGenderedUsers] = useState(null);
     const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
+
+    let navigate = useRouter();
 
     const userId = cookies.user_id
 
@@ -46,12 +49,15 @@ const Dashboard: React.FC = () => {
     };
 
     useEffect(() => {
-        getUser();
-    }, []);
+        if (!userId) {
+            navigate.push('/');
+        } else {
+            getUser();
+        }
+    }, [userId]);
 
     useEffect(() => {
         if (user) {
-
             getGenderedUsers();
         }
     }, [user]);

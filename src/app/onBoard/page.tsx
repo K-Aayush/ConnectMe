@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react';
 import { Button } from '@/components';
 import { useCookies } from "react-cookie";
 import { useState } from 'react'
@@ -23,6 +24,12 @@ const OnBoard = () => {
     })
 
     let navigate = useRouter();
+
+    useEffect(() => {
+        if (!cookies.user_id) {
+            navigate.push('/');
+        }
+    }, [cookies]);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
