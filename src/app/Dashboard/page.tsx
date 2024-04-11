@@ -50,12 +50,12 @@ const Dashboard: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        getGenderedUsers();
+        if (user) {
+
+            getGenderedUsers();
+        }
     }, [user]);
 
-
-
-    console.log('genderuser', genderedUsers);
 
     const updateMatches = async (matchedUserId: any) => {
         try {
@@ -68,8 +68,6 @@ const Dashboard: React.FC = () => {
             console.log(error)
         }
     }
-
-    console.log(user)
 
 
     const outOfFrame = (name: string) => {
@@ -109,7 +107,7 @@ const Dashboard: React.FC = () => {
                             {filteredGenderedUsers?.map((genderedUser: any) =>
                                 <TinderCard
                                     className='absolute'
-                                    key={genderedUser.first_name}
+                                    key={genderedUser.user_id}
                                     swipeRequirementType='position'
                                     swipeThreshold={30}
                                     preventSwipe={['up', 'down']}

@@ -39,8 +39,6 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
 
     const messages: any = []
 
-    console.log('usermessage', userMessages)
-
     userMessages?.forEach((message: { message: any; timestamp: any }) => {
         const formattedmessage:any = {}
         formattedmessage["name"] = user?.first_name

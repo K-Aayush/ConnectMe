@@ -49,7 +49,6 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
             
             setCookie('user_id' as 'user', response.data.userId)
             setCookie('AuthToken' as 'user', response.data.token)
-            console.log(response)
 
             if (response.status === 201 && isSignUp) {
                 navigate.push('/onBoard');

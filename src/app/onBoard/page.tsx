@@ -25,7 +25,6 @@ const OnBoard = () => {
     let navigate = useRouter();
 
     const handleSubmit = async (e: any) => {
-        console.log('submit')
         e.preventDefault();
 
         try {
@@ -46,7 +45,6 @@ const OnBoard = () => {
             ...prevFormData,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value 
         }));
-        console.log(formData,"Form Data")
     }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

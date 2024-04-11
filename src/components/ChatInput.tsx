@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { BiSend } from "react-icons/bi";
 
 const ChatInput = ({ user, clickedUser, getUserMessages, getClickedUserMessages }: any) => {
-    const [textArea, setTextArea] = useState<any>(null)
+    const [textArea, setTextArea] = useState("")
     const userId = user?.user_id
     const clickUserId = clickedUser?.user_id
 
