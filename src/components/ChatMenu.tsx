@@ -23,8 +23,8 @@ const ChatMenu = ({ user }: any) => {
                         </div>
 
                         <div className="flex items-center text-center justify-center mb-6 gap-4">
-                            <img src="\Image\dating.jpg" alt="" className="rounded-full w-[40px] h-[40px] overflow-hidden" />
-                            <h3 className="text-2xl font-semibold">{user.first_name}</h3>
+                            <img src={`/uploads/${user.photo}`} alt="" className="rounded-full w-[60px] h-[60px] overflow-hidden" />
+                            <h3 className="uppercase tracking-wide font-semibold text-3xl">{user.first_name}</h3>
                         </div>
 
                     </div>

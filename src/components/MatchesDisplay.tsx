@@ -34,7 +34,7 @@ const MatchesDisplay = ({ matches, setClickedUser }: any) => {
             {filteredMatchedProfiles?.map((match: any, index: number) => (
                 <div key={index} onClick={() => setClickedUser(match)}>
                     <div className="flex gap-2 p-2 items-center hover:bg-gray-100 cursor-pointer rounded-md">
-                        <img src="" alt="" className='w-10 h-10 rounded-full' />
+                        <img src={`uploads/${match.photo}`} alt="" className='w-[50px] h-[50px] rounded-full' />
                         <h3 className="text-lg font-medium">{match?.first_name}</h3>
                     </div>
                 </div>

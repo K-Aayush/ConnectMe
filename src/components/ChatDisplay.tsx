@@ -42,7 +42,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
     userMessages?.forEach((message: { message: any; timestamp: any }) => {
         const formattedmessage:any = {}
         formattedmessage["name"] = user?.first_name
-        formattedmessage["img"] = user?.photo
+        formattedmessage["photo"] = user?.photo
         formattedmessage["message"] = message?.message
         formattedmessage["timestamp"] = message?.timestamp
         messages.push(formattedmessage)
@@ -51,7 +51,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
     clickedUserMessages?.forEach((message: { message: any; timestamp: any }) => {
         const formattedmessage:any = {}
         formattedmessage["name"] = clickedUser?.first_name
-        formattedmessage["img"] = clickedUser?.photo
+        formattedmessage["photo"] = clickedUser?.photo
         formattedmessage["message"] = message?.message
         formattedmessage["timestamp"] = message?.timestamp
         messages.push(formattedmessage)

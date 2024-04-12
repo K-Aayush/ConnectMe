@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 
 
 const OnBoard = () => {
-    const [profileImage, setProfileImage] = useState<File | null>(null);
-    const [cookies, setCookie, removeCookie]:any = useCookies(['user']);
+    const [profileImage, setProfileImage] = useState<any>();
+    const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
     const [formData, setFormData] = useState({
         "user_id": cookies.user_id,
         "first_name": "",
@@ -18,9 +18,9 @@ const OnBoard = () => {
         "gender_identity": "man",
         "show_gender": true,
         "gender_interest": "woman",
-        "photos": "",
         "about": "",
-        "matches": []
+        "matches": [],
+        "photo": null
     })
 
     let navigate = useRouter();
@@ -35,12 +35,28 @@ const OnBoard = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.put(`http://localhost:8000/user/${formData.user_id}`, { formData })
+            const userUpdateResponse = await axios.put(`http://localhost:8000/user/${formData.user_id}`, { formData });
 
-            if (response.status === 200) {
-                navigate.push('/Dashboard');
+            if (userUpdateResponse.status !== 200) {
+                throw new Error('Failed to update user information');
             }
-        } catch(error) {
+
+            const formDataWithPhoto = new FormData();
+            formDataWithPhoto.append("photo", profileImage);
+
+            const imageUploadResponse = await axios.put(`http://localhost:8000/upload-image/${formData.user_id}`, formDataWithPhoto, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (imageUploadResponse.status !== 200) {
+                throw new Error('Failed to upload profile image');
+            }
+
+            navigate.push('/Dashboard');
+
+        } catch (error) {
             console.log(error)
         }
     }
@@ -50,16 +66,16 @@ const OnBoard = () => {
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value 
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
         }));
+
+        console.log(formData)
     }
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+    const handleImageChange = (e: any) => {
+        const file = e.target.files[0];
 
-        if (file) {
-            setProfileImage(file);
-        }
+        setProfileImage(file);
     }
 
     return (
@@ -81,7 +97,7 @@ const OnBoard = () => {
                             </div>
 
                             {/* Form elements */}
-                            <form className="w-full">
+                            <form className="w-full" encType="multipart/form-data">
                                 <div className="flex flex-col">
                                     <label htmlFor="first_name" className="text-slate-800 font-semibold text-start">First Name</label>
                                     <input
@@ -252,7 +268,6 @@ const OnBoard = () => {
                                     id="photo"
                                     type="file"
                                     name="photo"
-                                    value={formData.photos}
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="mt-2 items-start"
