@@ -7,6 +7,7 @@ import { useState } from 'react'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ImSpinner2 } from 'react-icons/im';
+import Link from 'next/link';
 
 const EditProfile = () => {
     const [profileImage, setProfileImage] = useState<any>();
@@ -22,7 +23,7 @@ const EditProfile = () => {
         "about": "",
     })
 
-    const maxWords = 50; 
+    const maxWords = 50;
 
     let navigate = useRouter();
 
@@ -237,7 +238,7 @@ const EditProfile = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-slate-800 font-semibold text-start" htmlFor='about'>
-                                        About Me
+                                        About Me ({wordCount}/{maxWords} words)
                                     </label>
                                     <textarea
                                         id="about"
@@ -251,11 +252,19 @@ const EditProfile = () => {
                                     />
                                 </div>
 
-                                <div className="flex justify-center my-2">
+                                <div className="flex justify-center my-4 gap-4">
+                                    <Link href={'/Profile'} className='w-1/3'>
+                                        <Button
+                                            custom='w-full'
+                                            gradient
+                                            label="Cancel"
+                                        />
+                                    </Link>
                                     <Button
+                                        custom='w-1/3'
                                         gradient
                                         onClick={handleSubmit}
-                                        label="Edit Profile"
+                                        label="Save"
                                     />
                                 </div>
                             </form>

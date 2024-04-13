@@ -175,9 +175,9 @@ const Profile = () => {
                         </div>
                         <h1 className="md:text-5xl text-3xl font-semibold text-center mb-4">{userData.first_name}</h1>
                         <div className='flex flex-col break-words md:max-w-[50%] mx-auto overflow-x-auto md:gap-4 gap-3'>
-                            <p className="md:text-xl text-sm font-medium">Age: {calculateAge(userData.dob)} Years Old</p>
-                            <p className="md:text-xl text-sm font-medium">Gender Identity: {userData.gender_identity}</p>
-                            <p className="md:text-xl text-sm font-medium">About Me: {userData.about}</p>
+                            <p className="text-sm md:text-lg font-medium"><span className='font-semibold'>Age:</span> {calculateAge(userData.dob)} Years Old</p>
+                            <p className="text-sm md:text-lg font-medium"><span className='font-semibold'>Gender Identity:</span> {userData.gender_identity}</p>
+                            <p className="text-sm md:text-lg font-medium"><span className='font-semibold'>About Me:</span> {userData.about}</p>
                         </div>
                         <button className="border-[2px] font-bold py-1 px-4 rounded-full mt-6 bg-gray-300 hover:bg-gray-400 text-black border-black ease-linear transition-all duration-150">
                             <Link href={"/EditProfile"} >Edit Profile</Link>
