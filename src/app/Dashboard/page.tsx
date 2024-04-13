@@ -102,7 +102,6 @@ const Dashboard: React.FC = () => {
     // };
 
 
-
     return (
         <>
             {user &&
@@ -121,7 +120,7 @@ const Dashboard: React.FC = () => {
                                     onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}
                                 >
                                     <div
-                                        style={{ backgroundImage: `url(/uploads/${genderedUser.photo})` }}
+                                        style={{ backgroundImage: `url("uploads/${genderedUser.photo}")` }}
                                         className="relative bg-gray-300 max-w-[85vw] w-[400px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
                                         <h3 className="absolute bottom-0 m-2 text-black">
                                             {genderedUser.first_name}

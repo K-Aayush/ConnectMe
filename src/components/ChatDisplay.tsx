@@ -40,7 +40,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
     const messages: any = []
 
     userMessages?.forEach((message: { message: any; timestamp: any }) => {
-        const formattedmessage:any = {}
+        const formattedmessage: any = {}
         formattedmessage["name"] = user?.first_name
         formattedmessage["photo"] = user?.photo
         formattedmessage["message"] = message?.message
@@ -49,7 +49,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
     })
 
     clickedUserMessages?.forEach((message: { message: any; timestamp: any }) => {
-        const formattedmessage:any = {}
+        const formattedmessage: any = {}
         formattedmessage["name"] = clickedUser?.first_name
         formattedmessage["photo"] = clickedUser?.photo
         formattedmessage["message"] = message?.message
@@ -57,11 +57,14 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
         messages.push(formattedmessage)
     })
 
-    const acendingOrderMessages = messages?.sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
+    // const acendingOrderMessages = messages?.sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
+    const acendingOrderMessages = messages
+        ? messages.slice().sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
+        : [];
 
     return (
         <>
-            <Chat acendingOrderMessages={acendingOrderMessages}/>
+            <Chat acendingOrderMessages={acendingOrderMessages} />
             <ChatInput user={user} clickedUser={clickedUser} getUserMessages={getUserMessages} getClickedUserMessages={getClickedUserMessages} />
         </>
     )
