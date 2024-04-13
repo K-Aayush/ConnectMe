@@ -53,7 +53,6 @@ const Profile = () => {
                         <div className='flex flex-col break-words md:max-w-[50%] mx-auto overflow-x-auto md:gap-4 gap-3'>
                             <p className="md:text-xl text-sm font-medium">Age: {calculateAge(userData.dob)} Years Old</p>
                             <p className="md:text-xl text-sm font-medium">Gender Identity: {userData.gender_identity}</p>
-                            <p className="md:text-xl text-sm font-medium">Gender Interest: {userData.gender_interest}</p>
                             <p className="md:text-xl text-sm font-medium">About Me: {userData.about}</p>
                         </div>
                         <button className="border-[2px] text-white font-bold py-2 px-4 rounded-full mt-6 hover:bg-gray-300 hover:text-black hover:border-black ease-linear transition-all duration-150">
@@ -62,7 +61,7 @@ const Profile = () => {
                         <Link href="/Dashboard" className="absolute top-0 left-0 m-4 flex gap-2 text-xl items-center p-3 rounded-xl "><FaArrowLeft /> Dashboard</Link>
                     </div>
                 ) : (
-                    <div className='text-center'>
+                    <div className='w-full flex justify-center text-2xl font-semibold mt-4'>
                         <ImSpinner2 size={50} className='animate-spin' />
                     </div>
                 )}
