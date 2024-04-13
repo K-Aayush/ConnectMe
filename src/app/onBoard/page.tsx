@@ -6,17 +6,19 @@ import { useCookies } from "react-cookie";
 import { useState } from 'react'
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { ImSpinner2 } from 'react-icons/im';
 
 
 const OnBoard = () => {
     const [profileImage, setProfileImage] = useState<any>();
     const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
+    const [loading, setLoading] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(true);
     const [formData, setFormData] = useState({
         "user_id": cookies.user_id,
         "first_name": "",
         "dob": "",
         "gender_identity": "man",
-        "show_gender": true,
         "gender_interest": "woman",
         "about": "",
         "matches": [],
@@ -28,11 +30,16 @@ const OnBoard = () => {
     useEffect(() => {
         if (!cookies.user_id) {
             navigate.push('/');
+        } else {
+            setTimeout(() => {
+                setShowSpinner(false);
+            }, 1000);
         }
     }, [cookies]);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             const userUpdateResponse = await axios.put(`http://localhost:8000/user/${formData.user_id}`, { formData });
@@ -58,6 +65,8 @@ const OnBoard = () => {
 
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -172,17 +181,6 @@ const OnBoard = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-row gap-2 my-2">
-                                    <input
-                                        id="show-gender"
-                                        type="checkbox"
-                                        name="show_gender"
-                                        onChange={handleChange}
-                                        className="accent-pink-500"
-                                    />
-                                    <label htmlFor="show-gender" className="text-sm">Show gender on my profile</label>
-                                </div>
-
                                 <div className="flex flex-col">
                                     <label className="text-slate-800 font-semibold text-start">Show Me</label>
                                     <div className="flex flex-row gap-2 my-2">
@@ -290,6 +288,11 @@ const OnBoard = () => {
                     </div>
                 </div>
             </div>
+            {loading && (
+                <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
+                    <ImSpinner2 className="animate-spin h-12 w-12 text-white" />
+                </div>
+            )}
         </>
     )
 }

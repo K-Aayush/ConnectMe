@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Chat, ChatInput } from '.'
 import axios from 'axios'
+import { ImSpinner2 } from 'react-icons/im'
 
 const ChatDisplay = ({ user, clickedUser }: any) => {
 
@@ -9,6 +10,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
     const clickedUserId = clickedUser?.user_id
     const [userMessages, setUserMessages] = useState<any>(null)
     const [clickedUserMessages, setClickedUserMessages] = useState<any>(null)
+    const [loading, setLoading] = useState<boolean>(true);
 
     const getUserMessages = async () => {
         try {
@@ -18,6 +20,8 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
             setUserMessages(response.data)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -29,6 +33,8 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
             setClickedUserMessages(response.data)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -57,15 +63,22 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
         messages.push(formattedmessage)
     })
 
-    // const acendingOrderMessages = messages?.sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
     const acendingOrderMessages = messages
         ? messages.slice().sort((a: any, b: any) => b.timestamp.localeCompare(a.timestamp))
         : [];
 
     return (
         <>
-            <Chat acendingOrderMessages={acendingOrderMessages} />
-            <ChatInput user={user} clickedUser={clickedUser} getUserMessages={getUserMessages} getClickedUserMessages={getClickedUserMessages} />
+            {loading ? (
+                <div className='flex items-center justify-center mt-56'>
+                    <ImSpinner2 size={30} className='animate-spin' />
+                </div>
+            ) : (
+                <>
+                    <Chat acendingOrderMessages={acendingOrderMessages} />
+                    <ChatInput user={user} clickedUser={clickedUser} getUserMessages={getUserMessages} getClickedUserMessages={getClickedUserMessages} />
+                </>
+            )}
         </>
     )
 }

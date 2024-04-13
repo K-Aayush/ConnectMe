@@ -9,6 +9,7 @@ import { RxCross1 } from "react-icons/rx";
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useRouter } from "next/navigation";
+import { ImSpinner2 } from 'react-icons/im'
 
 
 type Direction = 'left' | 'right' | 'up' | 'down';
@@ -19,6 +20,7 @@ const Dashboard: React.FC = () => {
     const [user, setUser] = useState(null);
     const [genderedUsers, setGenderedUsers] = useState(null);
     const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
+    const [loading, setLoading] = useState<boolean>(true);
 
     let navigate = useRouter();
 
@@ -33,6 +35,8 @@ const Dashboard: React.FC = () => {
             setGenderedUsers(response.data);
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -104,7 +108,12 @@ const Dashboard: React.FC = () => {
 
     return (
         <>
-            {user &&
+            {loading ? (
+                <div className="flex justify-center items-center h-screen bg-gradient-to-tr from-[#e90b76b7] to-[#f06e52]">
+                    <ImSpinner2 size={50} className='animate-spin' />
+                </div>
+            ) : (
+                user &&
                 <div className='h-screen bg-gradient-to-tr from-[#e90b76b7] to-[#f06e52] pt-2'>
                     <Header user={user} />
                     <div className="flex flex-col justify-center items-center">
@@ -133,7 +142,8 @@ const Dashboard: React.FC = () => {
                             {lastDirection ? <p>You Swiped {lastDirection}</p> : <p />}
                         </div>
                     </div>
-                </div>}
+                </div>
+            )}
         </>
     )
 }
