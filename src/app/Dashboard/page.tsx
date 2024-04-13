@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
     return (
         <>
             {user &&
-                <div>
+                <div className='h-screen bg-gradient-to-tr from-[#e90b76b7] to-[#f06e52] pt-2'>
                     <Header user={user} />
                     <div className="flex flex-col justify-center items-center">
                         <div className="w-[400px] max-w-[85vw] h-[50vh] mt-[10vh]">

@@ -11,7 +11,7 @@ const ChatMenu = ({ user }: any) => {
 
     return (
         <div>
-            <div onClick={() => setMessageMenu(true)} className="cursor-pointer p-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full">
+            <div onClick={() => setMessageMenu(true)} className="cursor-pointer p-3 hover:bg-gray-200 text-black rounded-full">
                 <LuMessagesSquare size={30} />
             </div>
 
