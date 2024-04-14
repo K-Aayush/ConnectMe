@@ -4,12 +4,12 @@ import { Header } from '@/components'
 import React from 'react'
 import { useState, useRef, useMemo, useEffect } from 'react'
 import TinderCard from 'react-tinder-card'
-import { IoHeartOutline } from "react-icons/io5";
-import { RxCross1 } from "react-icons/rx";
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useRouter } from "next/navigation";
 import { ImSpinner2 } from 'react-icons/im'
+import { BsThreeDotsVertical } from "react-icons/bs";
+import Link from 'next/link'
 
 
 type Direction = 'left' | 'right' | 'up' | 'down';
@@ -21,6 +21,7 @@ const Dashboard: React.FC = () => {
     const [genderedUsers, setGenderedUsers] = useState(null);
     const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
     const [loading, setLoading] = useState<boolean>(true);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     let navigate = useRouter();
 
@@ -99,12 +100,6 @@ const Dashboard: React.FC = () => {
         genderedUser => !matchedUserIds.includes(genderedUser.user_id)
     )
 
-    // const swipe = async (dir: Direction) => {
-    //     if (currentIndex < genderedUsers.length) {
-    //         swiped(dir, genderedUsers[currentIndex].name);
-    //     }
-    // };
-
 
     return (
         <>
@@ -131,9 +126,17 @@ const Dashboard: React.FC = () => {
                                     <div
                                         style={{ backgroundImage: `url("uploads/${genderedUser.photo}")` }}
                                         className="relative bg-gray-300 max-w-[85vw] w-[400px] h-[50vh] padding-[20px] shadow-2xl rounded-2xl bg-cover bg-center">
-                                        <h3 className="absolute bottom-0 m-2 text-black">
-                                            {genderedUser.first_name}
+                                        <h3 className="absolute bottom-0 m-2 text-black bg-gray-200 w-[95%] rounded-lg py-1 px-2 cursor-default ">
+                                            Name: {genderedUser.first_name}
                                         </h3>
+                                        {/* <div className="absolute top-0 right-0 m-2 rounded-full cursor-pointer">
+                                            <BsThreeDotsVertical size={25} />
+                                        </div> */}
+                                        <Link href={`/userProfile/${genderedUser.user_id}`}>
+                                            <div className="absolute top-0 right-0 m-2 px-3 py-1 bg-white rounded-full shadow-md">
+                                                View Profile
+                                            </div>
+                                        </Link>
                                     </div>
                                 </TinderCard>
                             )}

@@ -164,7 +164,7 @@ const Profile = () => {
                             <img
                                 src={`uploads/${userData.photo}`}
                                 alt="Profile"
-                                className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-full mb-4 object-cover"                                
+                                className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-full mb-4 object-cover border-[2px]"                                
                             />
                              <button
                                 className="absolute bottom-3 border-[2px] font-bold py-1 px-4 rounded-full bg-gray-300 text-black border-black ease-linear transition-all duration-150"

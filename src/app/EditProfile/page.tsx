@@ -97,7 +97,7 @@ const EditProfile = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
+            <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">
                 <div className="flex flex-col items-center justify-center w-full flex-1 px-8 md:px-16 lg:px-20 text-center">
 
                     {/* outer container for entire content */}

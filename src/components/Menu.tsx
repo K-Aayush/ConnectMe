@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 const Menu = () => {
     const [menu, setMenu] = useState<boolean>(false)
-    const [cookies, setCookie, removeCookie] = useCookies(['user'])
+    const [cookies, setCookie, removeCookie] = useCookies<any>(['user'])
 
     const logout = () => {
         removeCookie('user_id' as 'user', cookies.userId)

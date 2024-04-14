@@ -13,13 +13,12 @@ const OnBoard = () => {
     const [profileImage, setProfileImage] = useState<any>();
     const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
     const [loading, setLoading] = useState(false);
-    const [showSpinner, setShowSpinner] = useState(true);
     const [formData, setFormData] = useState({
         "user_id": cookies.user_id,
         "first_name": "",
         "dob": "",
-        "gender_identity": "man",
-        "gender_interest": "woman",
+        "gender_identity": "",
+        "gender_interest": "",
         "about": "",
         "matches": [],
         "photo": null
@@ -30,10 +29,6 @@ const OnBoard = () => {
     useEffect(() => {
         if (!cookies.user_id) {
             navigate.push('/');
-        } else {
-            setTimeout(() => {
-                setShowSpinner(false);
-            }, 1000);
         }
     }, [cookies]);
 
@@ -78,7 +73,6 @@ const OnBoard = () => {
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
         }));
 
-        console.log(formData)
     }
 
     const handleImageChange = (e: any) => {
@@ -89,7 +83,7 @@ const OnBoard = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
+            <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">
                 <div className="flex flex-col items-center justify-center w-full flex-1 px-8 md:px-16 lg:px-20 text-center">
 
                     {/* outer container for entire content */}
