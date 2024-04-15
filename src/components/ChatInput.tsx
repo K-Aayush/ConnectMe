@@ -28,11 +28,11 @@ const ChatInput = ({ user, clickedUser, getUserMessages, getClickedUserMessages 
     }
 
     return (
-        <div className="relative">
-            <textarea className="ml-6 px-2 py-auto resize-none rounded-md border border-gray-500 w-[90%]" value={textArea} onChange={(e: any) => setTextArea(e.target.value)} />
-            <div className="absolute top-3 right-8 text-red-400 hover:text-red-600">
+        <div className="relative flex items-center justify-between">
+            <textarea className="ml-6 px-2 py-auto resize-none rounded-md border border-gray-500 w-[75%] md:w-[82%]" value={textArea} onChange={(e: any) => setTextArea(e.target.value)} />
+            <div className="absolute top-2 right-4 text-red-400 hover:text-red-600">
                 <button onClick={addMessage}>
-                    <BiSend size={25} />
+                    <BiSend size={40} />
                 </button>
             </div>
         </div>

@@ -4,7 +4,7 @@ import { Chat, ChatInput } from '.'
 import axios from 'axios'
 import { ImSpinner2 } from 'react-icons/im'
 
-const ChatDisplay = ({ user, clickedUser }: any) => {
+const ChatDisplay = ({ user, clickedUser, loggedInUserId }: any) => {
 
     const userId = user?.user_id
     const clickedUserId = clickedUser?.user_id
@@ -43,6 +43,17 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
         getClickedUserMessages()
     }, [])
 
+    const handleDeleteMessage = async () => {
+        try {
+            await axios.delete(`http://localhost:8000/deleteMessage/${userId}`);
+            getUserMessages();
+            getClickedUserMessages();
+        } catch (error) {
+            console.error("Error deleting messages:", error);
+        }
+    };
+
+
     const messages: any = []
 
     userMessages?.forEach((message: { message: any; timestamp: any }) => {
@@ -75,7 +86,7 @@ const ChatDisplay = ({ user, clickedUser }: any) => {
                 </div>
             ) : (
                 <>
-                    <Chat acendingOrderMessages={acendingOrderMessages} />
+                    <Chat acendingOrderMessages={acendingOrderMessages} handleDeleteMessage={handleDeleteMessage} />
                     <ChatInput user={user} clickedUser={clickedUser} getUserMessages={getUserMessages} getClickedUserMessages={getClickedUserMessages} />
                 </>
             )}

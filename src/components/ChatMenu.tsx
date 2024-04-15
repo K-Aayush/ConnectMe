@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { LuMessagesSquare } from "react-icons/lu";
 import { RxCross1 } from "react-icons/rx";
 import { MatchesDisplay, ChatDisplay } from '.';
+import axios from 'axios';
 
 const ChatMenu = ({ user }: any) => {
     const [messageMenu, setMessageMenu] = useState<boolean>(false)
