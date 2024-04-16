@@ -9,6 +9,8 @@ import ChatDisplay from "./ChatDisplay";
 import MatchesDisplay from "./MatchesDisplay";
 import Chat from "./Chat";
 import ChatInput from "./ChatInput";
+import SideBar from "./SideBar";
+import DashboardView from "./DashboardView";
 
 
 export {
@@ -22,5 +24,7 @@ export {
     ChatDisplay,
     MatchesDisplay,
     Chat,
-    ChatInput
+    ChatInput,
+    SideBar,
+    DashboardView
 }
