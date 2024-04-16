@@ -4,7 +4,7 @@ import { Chat, ChatInput } from '.'
 import axios from 'axios'
 import { ImSpinner2 } from 'react-icons/im'
 
-const ChatDisplay = ({ user, clickedUser, loggedInUserId }: any) => {
+const ChatDisplay = ({ user, clickedUser }: any) => {
 
     const userId = user?.user_id
     const clickedUserId = clickedUser?.user_id
