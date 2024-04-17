@@ -1,3 +1,5 @@
+"use client"
+
 import { SideBar, DashboardView } from '@/components'
 import React from 'react'
 

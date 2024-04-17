@@ -11,6 +11,8 @@ import Chat from "./Chat";
 import ChatInput from "./ChatInput";
 import SideBar from "./SideBar";
 import DashboardView from "./DashboardView";
+import Piechart from "./PieChart";
+import User from "./Users";
 
 
 export {
@@ -26,5 +28,7 @@ export {
     Chat,
     ChatInput,
     SideBar,
-    DashboardView
+    DashboardView,
+    Piechart,
+    User
 }
