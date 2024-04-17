@@ -1,20 +1,44 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaUsers } from 'react-icons/fa6'
 import { FaMale, FaFemale } from 'react-icons/fa'
 import { BiMaleFemale } from "react-icons/bi";
 import Piechart from './PieChart';
+import axios from 'axios';
+import Link from 'next/link';
 
 const DashboardView = () => {
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get("http://localhost:8000/users");
+                setUserData(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    const maleCount = userData.filter(user => user.gender_identity === 'man').length;
+    const femaleCount = userData.filter(user => user.gender_identity === 'woman').length;
+    const otherCount = userData.filter(user => user.gender_identity !== 'man' && user.gender_identity !== 'woman').length;
+    const totalUsers = userData.length;
+
     return (
         <div>
             <div className='flex items-center justify-end h-[70px] shadow-lg px-[25px] border'>
                 <div>
-                    <div className='flex items-center gap-4 text-center'>
-                        <p>Aayush Karki</p>
-                        <img className='object-cover rounded-full w-12 h-12' src="/image/dating.jpg" alt="" />
-                    </div>
+                    <Link href={'/AdminProfile'}>
+                        <div className='flex items-center gap-4 text-center'>
+                            <p>Aayush Karki</p>
+                            <img className='object-cover rounded-full w-12 h-12' src="/image/dating.jpg" alt="" />
+                        </div>
+                    </Link>
                 </div>
             </div>
             <div className='pt-[25px] px-[25px] bg-[#F8F9FC]'>
@@ -23,28 +47,28 @@ const DashboardView = () => {
                     <div className='h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#4E73DF] flex items-center justify-between px-[30px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
                         <div>
                             <h2 className='text-[#B589DF] text-[11px] leading-[17px] font-bold'>Total Users</h2>
-                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>10</h1>
+                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>{totalUsers}</h1>
                         </div>
                         <FaUsers size={25} />
                     </div>
                     <div className='h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#1CC88A] flex items-center justify-between px-[30px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
                         <div>
                             <h2 className='text-[#1CC88A] text-[11px] leading-[17px] font-bold'>Male</h2>
-                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>4</h1>
+                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>{maleCount}</h1>
                         </div>
                         <FaMale size={25} />
                     </div>
                     <div className='h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#ff3939] flex items-center justify-between px-[30px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
                         <div>
                             <h2 className='text-[#ff3939] text-[11px] leading-[17px] font-bold'>Female</h2>
-                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>4</h1>
+                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>{femaleCount}</h1>
                         </div>
                         <FaFemale size={25} />
                     </div>
                     <div className='h-[100px] rounded-[8px] bg-white border-l-[4px] border-[#d1d100] flex items-center justify-between px-[30px] cursor-pointer hover:shadow-lg transform hover:scale-[103%] transition duration-300 ease-out'>
                         <div>
                             <h2 className='text-[#d1d100] text-[11px] leading-[17px] font-bold'>Others</h2>
-                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>2</h1>
+                            <h1 className='text-[20px] leading-6 font-bold text-[#5A5C69] mt-[5px]'>{otherCount}</h1>
                         </div>
                         <BiMaleFemale size={25} />
                     </div>
@@ -55,7 +79,7 @@ const DashboardView = () => {
                             <h2>Users Overview</h2>
                         </div>
                         <div>
-                         <Piechart />
+                            <Piechart />
                         </div>
                     </div>
                 </div>
