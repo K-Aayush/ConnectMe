@@ -15,6 +15,7 @@ const NavBar = ({ setIsSignUp, setShowModal, showLoginButton = true }: any) => {
     return (
         <nav className="">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+
                 <div>
                     <Image
                         src={"/Image/connectme logo.png"}

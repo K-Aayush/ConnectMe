@@ -4,9 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRouter } from "next/navigation";
 import axios from 'axios';
+import Link from 'next/link';
 
 const User = () => {
     const [userData, setUserData] = useState<any[]>([]);
+    const [adminData, setAdminData] = useState<any>();
     const [cookies, setCookie, removeCookie]: any = useCookies(['admin']);
     const navigate = useRouter();
 
@@ -30,15 +32,45 @@ const User = () => {
         fetchUserData();
     }, [cookies]);
 
+    useEffect(() => {
+        const fetchAdminData = async () => {
+            try {
+                const adminId = cookies.admin_id
+                const response = await axios.get("http://localhost:8000/admin", {
+                    params: { adminId }
+                });
+                setAdminData(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchAdminData();
+    }, [cookies]);
+
+    const handleDeleteUser = async (userId: string) => {
+        try {
+            await axios.delete(`http://localhost:8000/user?userId=${userId}`);
+            const updatedUserData = userData.filter(user => user.user_id !== userId);
+            setUserData(updatedUserData);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    };
+
     return (
         <>
             <div className='flex items-center justify-end h-[70px] shadow-lg px-[25px] border'>
-                <div>
-                    <div className='flex items-center gap-4 text-center'>
-                        <p>Aayush Karki</p>
-                        <img className='object-cover rounded-full w-12 h-12' src="/image/dating.jpg" alt="" />
-                    </div>
-                </div>
+                {adminData ? (<div>
+                    <Link href={'/AdminProfile'}>
+                        <div className='flex items-center gap-4 text-center'>
+                            <p>{adminData.name}</p>
+                            <img className='object-cover rounded-full w-12 h-12' src={`/uploads/${adminData.photo}`} alt="" />
+                        </div>
+                    </Link>
+                </div>) : (
+                    <div>Loading...</div>
+                )}
             </div>
             <div className="pt-[25px] px-[25px] bg-[#F8F9FC] mx-auto">
                 <h1 className="text-[#5a5c69] text-[28px] leading-[34px] font-normal cursor-pointer pb-[25px]">Users Profile</h1>
@@ -61,6 +93,7 @@ const User = () => {
                                     <h2 className="font-semibold">Gender:</h2>
                                     <p>{user.gender_identity}</p>
                                 </div>
+                                <button onClick={() => handleDeleteUser(user.user_id)} className='bg-red-500 py-2 px-3 rounded-md text-white mt-2 hover:bg-red-700'>Delete</button>
                             </div>
                         ))
                     ) : (

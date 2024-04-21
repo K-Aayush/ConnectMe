@@ -4,8 +4,8 @@ import axios from 'axios';
 
 const Chat = ({ acendingOrderMessages, handleDeleteMessage }: any) => {
 
-  const handleDelete = (userId: string) => {
-    handleDeleteMessage(userId);
+  const handleDelete = (_id: string) => {
+    handleDeleteMessage(_id);
   };
 
 

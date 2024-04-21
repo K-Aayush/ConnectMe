@@ -6,7 +6,7 @@ import React from 'react'
 const Users = () => {
     return (
         <div className='flex'>
-            <div className='basis-[20%] h-[100vh] border'>
+            <div className='basis-[20%] h-full border'>
                 <SideBar />
             </div>
             <div className='basis-[80%] border'>

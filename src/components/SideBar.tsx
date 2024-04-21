@@ -20,7 +20,7 @@ const SideBar = () => {
 
     return (
 
-        <div className='bg-blue-500 h-full px-[25px]'>
+        <div className='bg-blue-500 h-screen px-[25px] fixed top-0 left-0 bottom-0 overflow-y-auto w-[20%]'>
             <div className='px-[15px] py-[30px] flex items-center justify-center border-b-[1px] border-[#EDEDED]/[0.3] cursor-pointer'>
                 <h1 className='text-white text-[20px] leading-[24px] font-extrabold'>Admin Panel</h1>
             </div>
@@ -39,10 +39,12 @@ const SideBar = () => {
                 </div>
             </Link>
 
-            <div className='gap-[15px] py-[30px] flex items-center justify-start border-b-[1px] border-[#EDEDED]/[0.3] cursor-pointer'>
-                <TbArrowsExchange color='white' />
-                <h1 className='text-white text-[20px] leading-[24px] font-extrabold'>Change Password</h1>
-            </div>
+            <Link href={'/ChangeAdminPassword'}>
+                <div className='gap-[15px] py-[30px] flex items-center justify-start border-b-[1px] border-[#EDEDED]/[0.3] cursor-pointer'>
+                    <TbArrowsExchange color='white' />
+                    <h1 className='text-white text-[20px] leading-[24px] font-extrabold'>Change Password</h1>
+                </div>
+            </Link>
 
 
             <div onClick={logout} className='gap-[15px] py-[30px] flex items-center justify-start border-b-[1px] border-[#EDEDED]/[0.3] cursor-pointer'>

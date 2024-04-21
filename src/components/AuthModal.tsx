@@ -156,49 +156,6 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                         />
                         <hr />
                     </form>
-                    <form className="flex flex-col gap-3" onSubmit={handleUserSubmit} action="">
-                        <input
-                            className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Email"
-                            required={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                        />
-
-                        <input
-                            className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Password"
-                            required={true}
-                            pattern=".{7,}"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                        />
-
-                        {isSignUp && (
-                            <input
-                                className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
-                                type="password"
-                                id="password-check"
-                                name="password-check"
-                                placeholder="Confirm Password"
-                                required={true}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setConfirmPassword(e.target.value)
-                                }
-                            />
-                        )}
-
-                        <Button
-                            custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
-                            label={isSignUp ? "Create" : "Log In"}
-                            onClick={() => { }}
-                        />
-                        <hr />
-                    </form>
 
 
                     <p className="text-black text-xl">

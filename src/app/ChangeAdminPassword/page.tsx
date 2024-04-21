@@ -10,8 +10,8 @@ import { ImSpinner2 } from 'react-icons/im';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 
-const ChangePassword = () => {
-    const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
+const ChangeAdminPassword = () => {
+    const [cookies, setCookie, removeCookie]: any = useCookies(['admin']);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         oldPassword: "",
@@ -19,7 +19,7 @@ const ChangePassword = () => {
         confirmPassword: ""
     })
 
-    const user = cookies.user_id;
+    const user = cookies.admin_id;
 
     let navigate = useRouter();
 
@@ -40,14 +40,14 @@ const ChangePassword = () => {
                 throw new Error("New password and confirm password do not match");
             }
 
-            const response = await axios.post(`http://localhost:8000/change-password`, {
-                user_id: user,
+            const response = await axios.post(`http://localhost:8000/admin-change-password`, {
+                admin_id: user,
                 oldPassword: formData.oldPassword,
                 newPassword: formData.newPassword
             });
 
             if (response.status === 200) {
-                navigate.push("/Dashboard");
+                navigate.push("/AdminDashboard");
             } else {
                 throw new Error("Failed to change password");
             }
@@ -66,7 +66,7 @@ const ChangePassword = () => {
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl md:max-w-3xl">
                         <div className="w-full p-4 md:p-8">
                             <div className="text-left font-bold">
-                                <Link href={'/Dashboard'}>
+                                <Link href={'/AdminDashboard'}>
                                     <span className="flex justify-start items-center gap-2 text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]"><FaArrowLeft className='text-black' /> Dashboard</span>
                                 </Link>
                             </div>
@@ -137,4 +137,4 @@ const ChangePassword = () => {
     )
 }
 
-export default ChangePassword
+export default ChangeAdminPassword

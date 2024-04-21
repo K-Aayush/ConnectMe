@@ -7,9 +7,12 @@ import { BiMaleFemale } from "react-icons/bi";
 import Piechart from './PieChart';
 import axios from 'axios';
 import Link from 'next/link';
+import { useCookies } from 'react-cookie';
 
 const DashboardView = () => {
     const [userData, setUserData] = useState([]);
+    const [adminData, setAdminData] = useState<any>();
+    const [cookies, setCookie, removeCookie]: any = useCookies(['admin']);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -24,6 +27,22 @@ const DashboardView = () => {
         fetchUserData();
     }, []);
 
+    useEffect(() => {
+        const fetchAdminData = async () => {
+            try {
+                const adminId = cookies.admin_id
+                const response = await axios.get("http://localhost:8000/admin", {
+                    params: { adminId }
+                });
+                setAdminData(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchAdminData();
+    }, [cookies]);
+
     const maleCount = userData.filter(user => user.gender_identity === 'man').length;
     const femaleCount = userData.filter(user => user.gender_identity === 'woman').length;
     const otherCount = userData.filter(user => user.gender_identity !== 'man' && user.gender_identity !== 'woman').length;
@@ -32,14 +51,16 @@ const DashboardView = () => {
     return (
         <div>
             <div className='flex items-center justify-end h-[70px] shadow-lg px-[25px] border'>
-                <div>
+                {adminData ? (<div>
                     <Link href={'/AdminProfile'}>
                         <div className='flex items-center gap-4 text-center'>
-                            <p>Aayush Karki</p>
-                            <img className='object-cover rounded-full w-12 h-12' src="/image/dating.jpg" alt="" />
+                            <p>{adminData.name}</p>
+                            <img className='object-cover rounded-full w-12 h-12' src={`/uploads/${adminData.photo}`} alt="" />
                         </div>
                     </Link>
-                </div>
+                </div>) : (
+                    <div>Loading...</div>
+                )}
             </div>
             <div className='pt-[25px] px-[25px] bg-[#F8F9FC]'>
                 <div className='text-[#5a5c69] text-[28px] leading-[34px] font-normal cursor-pointer'>Dashboard</div>
