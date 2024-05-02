@@ -7,12 +7,13 @@ import { useState } from 'react'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ImSpinner2 } from 'react-icons/im';
+import Link from 'next/link';
 
-
-const OnBoard = () => {
+const EditProfile = () => {
     const [profileImage, setProfileImage] = useState<any>();
     const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
     const [loading, setLoading] = useState(false);
+    const [wordCount, setWordCount] = useState(0);
     const [formData, setFormData] = useState({
         "user_id": cookies.user_id,
         "first_name": "",
@@ -20,15 +21,42 @@ const OnBoard = () => {
         "gender_identity": "",
         "gender_interest": "",
         "about": "",
-        "matches": [],
-        "photo": null
     })
+
+    const maxWords = 50;
 
     let navigate = useRouter();
 
     useEffect(() => {
         if (!cookies.user_id) {
             navigate.push('/');
+        } else {
+            const fetchUserData = async () => {
+                setLoading(true);
+                try {
+                    const userId = cookies.user_id;
+                    const response = await axios.get("http://localhost:8000/user", {
+                        params: { userId }
+                    });
+                    const userData = response.data;
+
+                    setFormData({
+                        user_id: userData.user_id,
+                        first_name: userData.first_name,
+                        dob: userData.dob,
+                        gender_identity: userData.gender_identity,
+                        gender_interest: userData.gender_interest,
+                        about: userData.about,
+                    });
+
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchUserData();
         }
     }, [cookies]);
 
@@ -43,20 +71,7 @@ const OnBoard = () => {
                 throw new Error('Failed to update user information');
             }
 
-            const formDataWithPhoto = new FormData();
-            formDataWithPhoto.append("photo", profileImage);
-
-            const imageUploadResponse = await axios.put(`http://localhost:8000/upload-image/${formData.user_id}`, formDataWithPhoto, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            if (imageUploadResponse.status !== 200) {
-                throw new Error('Failed to upload profile image');
-            }
-
-            navigate.push('/Dashboard');
+            navigate.push('/Profile');
 
         } catch (error) {
             console.log(error)
@@ -68,18 +83,17 @@ const OnBoard = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
 
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-        }));
+        const wordArray = value.split(/\s+/);
+        const currentWordCount = wordArray.filter(word => word !== '').length;
+        setWordCount(currentWordCount);
 
-    }
-
-    const handleImageChange = (e: any) => {
-        const file = e.target.files[0];
-
-        setProfileImage(file);
-    }
+        if (currentWordCount <= maxWords) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+            }));
+        }
+    };
 
     return (
         <>
@@ -87,15 +101,15 @@ const OnBoard = () => {
                 <div className="flex flex-col items-center justify-center w-full flex-1 px-8 md:px-16 lg:px-20 text-center">
 
                     {/* outer container for entire content */}
-                    <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl md:max-w-3xl">
 
-                        {/* Left side - Account creation form */}
-                        <div className="w-full md:w-3/5 p-4 md:p-8">
+                        {/* Account creation form */}
+                        <div className="w-full p-4 md:p-8">
                             <div className="text-left font-bold">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Connect</span>Me
                             </div>
                             <div className="py-6 md:py-10">
-                                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] mb-2">Create Account</h2>
+                                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] mb-2">Edit Profile</h2>
                                 <div className="border-2 w-10 border-[#e90b78] inline-block"></div>
                             </div>
 
@@ -224,7 +238,7 @@ const OnBoard = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-slate-800 font-semibold text-start" htmlFor='about'>
-                                        About Me
+                                        About Me ({wordCount}/{maxWords} words)
                                     </label>
                                     <textarea
                                         id="about"
@@ -238,47 +252,23 @@ const OnBoard = () => {
                                     />
                                 </div>
 
-                                <div className="hidden md:flex text-start my-2">
+                                <div className="flex justify-center my-4 gap-4">
+                                    <Link href={'/Profile'} className='w-1/3'>
+                                        <Button
+                                            custom='w-full'
+                                            gradient
+                                            label="Cancel"
+                                        />
+                                    </Link>
                                     <Button
+                                        custom='w-1/3'
                                         gradient
                                         onClick={handleSubmit}
-                                        label="Create Account"
+                                        label="Save"
                                     />
                                 </div>
-
                             </form>
                         </div>
-
-                        {/* Right side - Profile picture section */}
-                        <div className="w-full md:w-2/5 py-8 md:py-36 px-4 sm:px-8 lg:px-12">
-                            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2"> <span className="text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52]">Profile</span> Picture</h2>
-                            <div className="border-2 w-8 border-[#f06e52] inline-block mb-2"></div>
-                            <div className="flex flex-col">
-
-                                {/* File input for uploading profile picture */}
-                                <input
-                                    id="photo"
-                                    type="file"
-                                    name="photo"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    className="mt-2 items-start"
-                                />
-
-                                {/* Image preview */}
-                                {profileImage && (
-                                    <img
-                                        src={URL.createObjectURL(profileImage)}
-                                        alt="Profile Preview"
-                                        className="rounded object-cover mt-2"
-                                    />
-                                )}
-                            </div>
-                        </div>
-                        <div className="md:hidden my-4">
-                            <Button gradient onClick={handleSubmit} label="Create Account" />
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -291,4 +281,4 @@ const OnBoard = () => {
     )
 }
 
-export default OnBoard
+export default EditProfile

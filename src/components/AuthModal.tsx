@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "./index";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
 
 // Defining the props for the AuthModal component
 interface AuthModalProps {
@@ -15,10 +18,15 @@ interface AuthModalProps {
 // AuthModal component definition
 const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps) => {
 
-    const [email, setEmail] = useState<string | null>(null);
-    const [password, setPassword] = useState<string | null>(null);
-    const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+    const [email, setEmail] = useState<string | null>("");
+    const [password, setPassword] = useState<string | null>("");
+    const [confirmPassword, setConfirmPassword] = useState<string | null>("");
     const [error, setError] = useState<string | null>(null);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [cookies, setCookie, removeCookie] = useCookies(['user', 'admin']);
+    const [showUserForm, setShowUserForm] = useState<boolean>(true);
+
+    let navigate = useRouter();
 
     if (!isVisible) return null;
 
@@ -30,19 +38,69 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
         }
     };
 
-    // Function to handle form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+
+    const handleUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            
+            if (isSignUp && (password !== confirmPassword)) {
+                setError("Passwords do not match!");
+                return;
+            }
+
+            const endpoint = isSignUp ? 'signup' : 'login';
+            const response = await axios.post(`http://localhost:8000/${endpoint}`, { email, password });
+
+            if (response.status === 201) {
+                if (isSignUp) {
+                    setCookie('user_id' as 'user', response.data.userId);
+                    setCookie('AuthToken' as 'user', response.data.token);
+                    navigate.push('/onBoard');
+                } else {
+                    setCookie('user_id' as 'user', response.data.userId);
+                    setCookie('AuthToken' as 'user', response.data.token);
+                    navigate.push('/Dashboard');
+                }
+            } else if (response.status === 409) {
+                setError("User already exists.");
+            } else if (response.status === 401) {
+                setError("Invalid Credentials");
+            } else {
+                setError("Something went wrong. Please try again later.");
+            }
         } catch (error) {
-            
+            console.error("Error occurred during user signup/login:", error);
+            setError("Something went wrong. Please try again later.");
         }
+    };
 
+    const handleAdminSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-    }
+        try {
+            if (isSignUp && (password !== confirmPassword)) {
+                setError("Passwords do not match!");
+                return;
+            }
 
+            const endpoint = isSignUp ? 'signup' : 'adminLogin';
 
+            const response = await axios.post(`http://localhost:8000/${endpoint}`, { email, password });
+
+            if (response.status === 201) {
+                setCookie('admin_id' as 'admin', response.data.adminId);
+                setCookie('AdminAuthToken' as 'admin', response.data.token);
+                navigate.push('/AdminDashboard');
+            } else if (response.status === 401) {
+                setError("Invalid Credentials");
+            } else {
+                setError("Something went wrong. Please try again later.");
+            }
+        } catch (error) {
+            console.error("Error occurred during admin login:", error);
+            setError("Something went wrong. Please try again later.");
+        }
+    };
 
     return (
         <div
@@ -55,10 +113,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                     <h1 className="my-4 text-transparent bg-clip-text bg-gradient-to-tr from-[#e90b78] to-[#f06e52] text-3xl font-bold" >
                         {isSignUp ? 'Create Account' : 'Log In'}
                     </h1>
-                    <form
-                        className="flex flex-col gap-3"
-                        onSubmit={handleSubmit}
-                        action="">
+                    <form className="flex flex-col gap-3" onSubmit={handleAdminSubmit} action="">
                         <input
                             className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
                             type="email"
@@ -80,33 +135,32 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         />
 
-                        {isSignUp &&<input
-                            className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
-                            type="password"
-                            id="password-check"
-                            name="password-check"
-                            placeholder="Confirm Password"
-                            required={true}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
-                        />}
+                        {isSignUp && (
+                            <input
+                                className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5"
+                                type="password"
+                                id="password-check"
+                                name="password-check"
+                                placeholder="Confirm Password"
+                                required={true}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setConfirmPassword(e.target.value)
+                                }
+                            />
+                        )}
 
-                        {isSignUp ? <Button
-                            custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
-                            label="Create"
-                            onClick={() => { }}
-                        /> :  
                         <Button
                             custom="border text-transparent bg-clip-text border-slate-500 hover:border-slate-900 bg-gradient-to-r from-[#e90b78] to-[#f06e52]"
-                            label="Log In"
+                            label={isSignUp ? "Create" : "Log In"}
                             onClick={() => { }}
                         />
-                        }
                         <hr />
                     </form>
 
-                     <p className="text-black text-xl">
+
+                    <p className="text-black text-xl">
                         Find Your Soulmate
-                    </p> 
+                    </p>
                 </div>
                 <div
                     onClick={handleOnClose}

@@ -10,7 +10,7 @@ interface ButtonProps {
     custom?: string;
     gradient?: boolean;
     icon?: IconType;
-    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 // Defining the Button component using React.FC (functional component)
