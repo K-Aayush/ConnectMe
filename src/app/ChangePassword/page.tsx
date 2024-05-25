@@ -1,9 +1,8 @@
-'use client'
+"use client"
 
-import { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components';
 import { useCookies } from "react-cookie";
-import { useState } from 'react'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ImSpinner2 } from 'react-icons/im';
@@ -11,19 +10,20 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const ChangePassword = () => {
-    const [cookies, setCookie, removeCookie]: any = useCookies(['user']);
+    const [cookies] = useCookies(['user']);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         oldPassword: "",
         newPassword: "",
         confirmPassword: ""
-    })
+    });
+    const [popupMessage, setPopupMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
 
     const user = cookies.user_id;
-
     let navigate = useRouter();
 
-    const handleChange = (e: any) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -31,7 +31,7 @@ const ChangePassword = () => {
         }));
     };
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -47,12 +47,17 @@ const ChangePassword = () => {
             });
 
             if (response.status === 200) {
-                navigate.push("/Dashboard");
+                setShowPopup(true);
+                setPopupMessage("Password changed successfully");
+                setTimeout(() => {
+                    navigate.push("/Dashboard");
+                }, 2000);
             } else {
                 throw new Error("Failed to change password");
             }
         } catch (error) {
-            console.error("Error changing password:", error);
+            setShowPopup(true);
+            setPopupMessage("Error changing password: " + error.message);
         } finally {
             setLoading(false);
         }
@@ -133,8 +138,15 @@ const ChangePassword = () => {
                     <ImSpinner2 className="animate-spin h-12 w-12 text-white" />
                 </div>
             )}
+            {showPopup && (
+                <div className="fixed top-0 left-0 w-full flex justify-center items-center">
+                    <div className="bg-white border border-gray-300 rounded-md p-4 shadow-md">
+                        <p>{popupMessage}</p>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
 
-export default ChangePassword
+export default ChangePassword;

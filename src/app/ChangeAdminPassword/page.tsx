@@ -1,9 +1,10 @@
-'use client'
 
-import { useEffect } from 'react';
+
+"use client"
+
+import React, { useState } from 'react';
 import { Button } from '@/components';
 import { useCookies } from "react-cookie";
-import { useState } from 'react'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ImSpinner2 } from 'react-icons/im';
@@ -11,19 +12,20 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const ChangeAdminPassword = () => {
-    const [cookies, setCookie, removeCookie]: any = useCookies(['admin']);
+    const [cookies] = useCookies(['admin']);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         oldPassword: "",
         newPassword: "",
         confirmPassword: ""
-    })
+    });
+    const [popupMessage, setPopupMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
 
     const user = cookies.admin_id;
-
     let navigate = useRouter();
 
-    const handleChange = (e: any) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -31,7 +33,7 @@ const ChangeAdminPassword = () => {
         }));
     };
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -47,12 +49,15 @@ const ChangeAdminPassword = () => {
             });
 
             if (response.status === 200) {
+                setShowPopup(true);
+                setPopupMessage("Password changed successfully");
                 navigate.push("/AdminDashboard");
             } else {
                 throw new Error("Failed to change password");
             }
         } catch (error) {
-            console.error("Error changing password:", error);
+            setShowPopup(true);
+            setPopupMessage("Failed TO Change Password" + error.message);
         } finally {
             setLoading(false);
         }
@@ -133,8 +138,17 @@ const ChangeAdminPassword = () => {
                     <ImSpinner2 className="animate-spin h-12 w-12 text-white" />
                 </div>
             )}
+            {showPopup && (
+                <div className="fixed top-0 left-0 w-full flex justify-center items-center">
+                    <div className="bg-white border border-gray-300 rounded-md p-4 shadow-md">
+                        <p>{popupMessage}</p>
+                        <button onClick={() => setShowPopup(false)}>Close</button>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
 
-export default ChangeAdminPassword
+export default ChangeAdminPassword;
+
