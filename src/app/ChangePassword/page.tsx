@@ -8,22 +8,58 @@ import { useRouter } from "next/navigation";
 import { ImSpinner2 } from 'react-icons/im';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+
 
 const ChangePassword = () => {
     const [cookies] = useCookies(['user']);
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         oldPassword: "",
         newPassword: "",
         confirmPassword: ""
     });
-    const [popupMessage, setPopupMessage] = useState("");
-    const [showPopup, setShowPopup] = useState(false);
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [successMessage, setSuccessMessage] = useState("");
 
     const user = cookies.user_id;
     let navigate = useRouter();
 
-    const handleChange = (e) => {
+    const validate = () => {
+        let tempErrors: { [key: string]: string } = {};
+
+        if (!formData.oldPassword) {
+            tempErrors.oldPassword = "Old Password is required";
+        }
+
+        if (!formData.newPassword) {
+            tempErrors.newPassword = "New Password is required";
+        } else if (formData.newPassword.length < 7) {
+            tempErrors.newPassword = "New Password must be at least 7 characters";
+        } else if (!/[!@#$%^&*]/.test(formData.newPassword)) {
+            tempErrors.newPassword = "New Password must contain at least one special character (!@#$%^&*)";
+        } else if (!/\d/.test(formData.newPassword)) {
+            tempErrors.newPassword = "New Password must contain at least one number";
+        }
+
+        if (!formData.confirmPassword) {
+            tempErrors.confirmPassword = "Confirm Password is required";
+        } else if (formData.newPassword !== formData.confirmPassword) {
+            tempErrors.confirmPassword = "New Password and Confirm Password must match";
+        }
+
+
+        setErrors(tempErrors);
+
+        return Object.keys(tempErrors).length === 0;
+    };
+
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -31,15 +67,16 @@ const ChangePassword = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        try {
-            if (formData.newPassword !== formData.confirmPassword) {
-                throw new Error("New password and confirm password do not match");
-            }
+        if (!validate()) {
+            setLoading(false);
+            return;
+        }
 
+        try {
             const response = await axios.post(`http://localhost:8000/change-password`, {
                 user_id: user,
                 oldPassword: formData.oldPassword,
@@ -47,21 +84,20 @@ const ChangePassword = () => {
             });
 
             if (response.status === 200) {
-                setShowPopup(true);
-                setPopupMessage("Password changed successfully");
+                setSuccessMessage("Password changed successfully.");
                 setTimeout(() => {
+                    setSuccessMessage("");
                     navigate.push("/Dashboard");
                 }, 2000);
             } else {
                 throw new Error("Failed to change password");
             }
-        } catch (error) {
-            setShowPopup(true);
-            setPopupMessage("Error changing password: " + error.message);
         } finally {
             setLoading(false);
         }
     };
+
+
 
     return (
         <>
@@ -81,44 +117,68 @@ const ChangePassword = () => {
                             </div>
 
                             <form className="w-full">
-                                <div className="flex flex-col">
+                                <div className="flex flex-col relative">
                                     <label htmlFor="oldPassword" className="text-slate-800 font-semibold text-start">Old Password</label>
                                     <input
                                         id="oldPassword"
-                                        type="password"
+                                        type={showOldPassword ? "text" : "password"}
                                         name="oldPassword"
                                         value={formData.oldPassword}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
+                                        className="border border-gray-300 rounded-md p-2.5 pr-10 block w-full focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                         required
                                     />
+                                    <div className="absolute top-[45px] right-0 flex items-center pr-3">
+                                        {showOldPassword ? (
+                                            <FaEye className="text-gray-500 cursor-pointer" onClick={() => setShowOldPassword(false)} />
+                                        ) : (
+                                            <FaEyeSlash className="text-gray-500 cursor-pointer" onClick={() => setShowOldPassword(true)} />
+                                        )}
+                                    </div>
                                 </div>
+                                {errors && <p className="text-red-500">{errors.oldPassword}</p>}
 
-                                <div className="flex flex-col">
+                                <div className="flex flex-col relative">
                                     <label htmlFor="newPassword" className="text-slate-800 font-semibold text-start">New Password</label>
                                     <input
                                         id="newPassword"
-                                        type="password"
+                                        type={showNewPassword ? "text" : "password"}
                                         name="newPassword"
                                         value={formData.newPassword}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
+                                        className="border border-gray-300 rounded-md p-2.5 pr-10 block w-full focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                         required
                                     />
+                                    <div className="absolute top-[45px] right-0 flex items-center pr-3">
+                                        {showNewPassword ? (
+                                            <FaEye className="text-gray-500 cursor-pointer" onClick={() => setShowNewPassword(false)} />
+                                        ) : (
+                                            <FaEyeSlash className="text-gray-500 cursor-pointer" onClick={() => setShowNewPassword(true)} />
+                                        )}
+                                    </div>
                                 </div>
+                                {errors && <p className="text-red-500">{errors.newPassword}</p>}
 
-                                <div className="flex flex-col">
+                                <div className="flex flex-col relative">
                                     <label htmlFor="confirmPassword" className="text-slate-800 font-semibold text-start">Confirm Password</label>
                                     <input
                                         id="confirmPassword"
-                                        type="password"
+                                        type={showConfirmPassword ? "text" : "password"}
                                         name="confirmPassword"
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
-                                        className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
+                                        className="border border-gray-300 rounded-md p-2.5 pr-10 block w-full focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
                                         required
                                     />
+                                    <div className="absolute top-[45px] right-0 flex items-center pr-3">
+                                        {showConfirmPassword ? (
+                                            <FaEye className="text-gray-500 cursor-pointer" onClick={() => setShowConfirmPassword(false)} />
+                                        ) : (
+                                            <FaEyeSlash className="text-gray-500 cursor-pointer" onClick={() => setShowConfirmPassword(true)} />
+                                        )}
+                                    </div>
                                 </div>
+                                {errors && <p className="text-red-500">{errors.confirmPassword}</p>}
 
                                 <div className="flex justify-center my-4 gap-4">
                                     <Button
@@ -138,10 +198,10 @@ const ChangePassword = () => {
                     <ImSpinner2 className="animate-spin h-12 w-12 text-white" />
                 </div>
             )}
-            {showPopup && (
+            {successMessage && (
                 <div className="fixed top-0 left-0 w-full flex justify-center items-center">
                     <div className="bg-white border border-gray-300 rounded-md p-4 shadow-md">
-                        <p>{popupMessage}</p>
+                        <p>{successMessage}</p>
                     </div>
                 </div>
             )}
