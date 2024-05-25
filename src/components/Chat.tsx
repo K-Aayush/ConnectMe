@@ -2,13 +2,11 @@
 import React from 'react';
 import axios from 'axios';
 
-const Chat = ({ acendingOrderMessages, handleDeleteMessage }: any) => {
+const Chat = ({ acendingOrderMessages, handleDeleteMessage, userId }: any) => {
 
-  const handleDelete = (_id: string) => {
-    handleDeleteMessage(_id);
+  const handleDelete = (timestamp: any) => {
+    handleDeleteMessage(timestamp);
   };
-
-
 
   return (
     <>
@@ -28,13 +26,15 @@ const Chat = ({ acendingOrderMessages, handleDeleteMessage }: any) => {
           <div key={group.date}>
             <div className="text-gray-500 font-medium mt-2 justify-center text-center"><span>-----</span>{group.date}<span>-----</span></div>
             <div className='flex flex-col-reverse'>
-              {group.messages.map((message: any, index: number) => (
+              {group.messages.map((message: any, index: any) => (
                 <div key={index} className="bg-gray-300 rounded-2xl p-3 mt-2">
                   <div className="flex items-center mb-2">
                     <img src={`uploads/${message.photo}`} alt="Profile" className="mr-3 w-10 h-10 rounded-full" />
                     <p className="font-semibold">{message.name}</p>
                     <p className="text-gray-500 text-sm ml-2">{formatDate(message.timestamp)}</p>
-                    <button onClick={() => handleDelete(message.userId)} className="ml-auto bg-red-500 text-white font-bold py-1 px-2 rounded">Delete</button>
+                    {message.from_userId === userId && (
+                      <button onClick={() => handleDelete(message.timestamp)} className="ml-auto bg-red-500 text-white font-bold py-1 px-2 rounded">Delete</button>
+                    )}
                   </div>
                   <p className='break-words leading-normal'>{message.message}</p>
                 </div>
@@ -47,7 +47,7 @@ const Chat = ({ acendingOrderMessages, handleDeleteMessage }: any) => {
   );
 };
 
-function formatDate(timestamp: string) {
+function formatDate(timestamp: any) {
   const date = new Date(timestamp);
   const hours = date.getHours() % 12 || 12;
   const minutes = date.getMinutes().toString().padStart(2, '0');
