@@ -24,6 +24,8 @@ const OnBoard = () => {
         "photo": null
     })
 
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
     let navigate = useRouter();
 
     useEffect(() => {
@@ -34,6 +36,19 @@ const OnBoard = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+
+        const formErrors: { [key: string]: string } = {};
+        Object.entries(formData).forEach(([key, value]) => {
+            if (!value && key !== 'photo') {
+                formErrors[key] = '*';
+            }
+        });
+        setErrors(formErrors);
+
+        if (Object.keys(formErrors).length > 0) {
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -65,6 +80,7 @@ const OnBoard = () => {
         }
     }
 
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
 
@@ -73,6 +89,11 @@ const OnBoard = () => {
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
         }));
 
+        // Clear the error message when the field is changed
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: ''
+        }));
     }
 
     const handleImageChange = (e: any) => {
@@ -102,13 +123,17 @@ const OnBoard = () => {
                             {/* Form elements */}
                             <form className="w-full" encType="multipart/form-data">
                                 <div className="flex flex-col">
-                                    <label htmlFor="first_name" className="text-slate-800 font-semibold text-start">First Name</label>
+                                    <div className='flex gap-1 text-center'>
+                                        <label htmlFor="first_name" className="text-slate-800 font-semibold text-start">First Name</label>
+                                        {errors.first_name && <p className="text-red-500">{errors.first_name}</p>}
+                                    </div>
+
                                     <input
                                         id="first_name"
                                         type="text"
                                         name="first_name"
                                         placeholder="John"
-                                        required={true}
+                                        required
                                         value={formData.first_name}
                                         onChange={handleChange}
                                         className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
@@ -116,20 +141,27 @@ const OnBoard = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-slate-800 font-semibold text-start">Date of Birth</label>
+                                    <div className='flex gap-1 text-center'>
+                                        <label htmlFor="DOB" className="text-slate-800 font-semibold text-start">Date Of Birth</label>
+                                        {errors.dob && <p className="text-red-500">{errors.dob}</p>}
+                                    </div>
+
                                     <input
                                         id="Date_of_Birth"
                                         name="dob"
                                         type="date"
                                         value={formData.dob}
                                         className="border w-fit p-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-pink-500 ease-linear transition-all duration-150 my-2"
-                                        required={true}
+                                        required
                                         onChange={handleChange}
                                     />
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-slate-800 font-semibold text-start">Gender</label>
+                                    <div className='flex gap-1 text-center'>
+                                        <label htmlFor="gender identity" className="text-slate-800 font-semibold text-start">Gender</label>
+                                        {errors.gender_identity && <p className="text-red-500">{errors.gender_identity}</p>}
+                                    </div>
                                     <div className="flex flex-row gap-2 my-2">
                                         <label tabIndex={0} htmlFor="man-gender-identity" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
                                             <input
@@ -138,6 +170,7 @@ const OnBoard = () => {
                                                 type="radio"
                                                 name="gender_identity"
                                                 value="man"
+                                                required
                                                 checked={formData.gender_identity === 'man'}
                                                 onChange={handleChange}
                                                 className="sr-only"
@@ -151,6 +184,7 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_identity"
+                                                required
                                                 checked={formData.gender_identity === 'woman'}
                                                 value="woman"
                                                 onChange={handleChange}
@@ -165,6 +199,7 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_identity"
+                                                required
                                                 checked={formData.gender_identity === 'other'}
                                                 value="other"
                                                 onChange={handleChange}
@@ -176,7 +211,10 @@ const OnBoard = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-slate-800 font-semibold text-start">Show Me</label>
+                                    <div className='flex gap-1 text-center'>
+                                        <label htmlFor="gender interest" className="text-slate-800 font-semibold text-start">Show Me</label>
+                                        {errors.gender_interest && <p className="text-red-500">{errors.gender_interest}</p>}
+                                    </div>
                                     <div className="flex flex-row gap-2 my-2">
                                         <label tabIndex={0} htmlFor="man-gender-interest" className="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
                                             <input
@@ -184,6 +222,7 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_interest"
+                                                required
                                                 checked={formData.gender_interest === 'man'}
                                                 value="man"
                                                 onChange={handleChange}
@@ -198,6 +237,7 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_interest"
+                                                required
                                                 checked={formData.gender_interest === 'woman'}
                                                 value="woman"
                                                 onChange={handleChange}
@@ -212,6 +252,7 @@ const OnBoard = () => {
                                                 tabIndex={-1}
                                                 type="radio"
                                                 name="gender_interest"
+                                                required
                                                 checked={formData.gender_interest === 'everyone'}
                                                 value="everyone"
                                                 onChange={handleChange}
@@ -223,15 +264,17 @@ const OnBoard = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-slate-800 font-semibold text-start" htmlFor='about'>
-                                        About Me
-                                    </label>
+                                    <div className='flex gap-1 text-center'>
+                                        <label htmlFor="about" className="text-slate-800 font-semibold text-start">About Me</label>
+                                        {errors.about && <p className="text-red-500">{errors.about}</p>}
+                                    </div>
                                     <textarea
                                         id="about"
                                         typeof="text"
                                         name="about"
                                         rows={4}
                                         placeholder="Hi i am....."
+                                        required
                                         value={formData.about}
                                         onChange={handleChange}
                                         className="border border-gray-300 px-3 py-3 bg-white rounded text-sm shadow focus:outline-none focus:ring focus:ring-pink-500 w-full ease-linear transition-all duration-150 my-2"
@@ -260,7 +303,6 @@ const OnBoard = () => {
                                     id="photo"
                                     type="file"
                                     name="photo"
-                                    accept="image/*"
                                     onChange={handleImageChange}
                                     className="mt-2 items-start"
                                 />

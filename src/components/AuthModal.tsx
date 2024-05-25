@@ -17,9 +17,6 @@ interface AuthModalProps {
 
 
 const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps) => {
-    const [email, setEmail] = useState<string | null>("");
-    const [password, setPassword] = useState<string | null>("");
-    const [confirmPassword, setConfirmPassword] = useState<string | null>("");
     const [error, setError] = useState<string | null>(null);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [cookies, setCookie, removeCookie] = useCookies(["user", "admin"]);
@@ -28,9 +25,49 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [isSelectingRole, setIsSelectingRole] = useState<boolean>(!isSignUp);
 
+    const [email, setEmail] = useState<string | null>("");
+    const [password, setPassword] = useState<string | null>("");
+    const [confirmPassword, setConfirmPassword] = useState<string | null>("");
+    const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+
+
     let navigate = useRouter();
 
     if (!isVisible) return null;
+
+    const validate = () => {
+        let tempErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+
+        if (!email) {
+            tempErrors.email = "Email is Required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            tempErrors.email = "Invalid email address";
+        }
+
+        if (!password) {
+            tempErrors.password = "Password is required";
+        } else if (isSignUp) {
+            if (password.length < 7) {
+                tempErrors.password = "Password must be at least 7 characters";
+            } else if (!/\d/.test(password)) {
+                tempErrors.password = "Password must contain at least one number";
+            } else if (!/[!@#$%^&*]/.test(password)) {
+                tempErrors.password = "Password must contain at least one special character";
+            }
+        }
+
+        if (isSignUp) {
+            if (!confirmPassword) {
+                tempErrors.confirmPassword = "Password is Required";
+            } else if (confirmPassword !== password) {
+                tempErrors.confirmPassword = "Password doesn't match";
+            }
+        }
+
+        setErrors(tempErrors);
+
+        return Object.keys(tempErrors).length === 0;
+    };
 
     // Function to handle closing the modal
     const handleOnClose = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -42,15 +79,18 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
 
     const handleUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!validate()) {
+            return;
+        }
         try {
             if (isSignUp && password !== confirmPassword) {
                 setError("Passwords do not match!");
                 return;
             }
-
+    
             const endpoint = isSignUp ? "signup" : "login";
             const response = await axios.post(`http://localhost:8000/${endpoint}`, { email, password });
-
+    
             if (response.status === 201) {
                 setCookie("user_id" as "user", response.data.userId);
                 setCookie("AuthToken" as "user", response.data.token);
@@ -58,18 +98,28 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
             } else if (response.status === 409) {
                 setError("User already exists.");
             } else if (response.status === 401) {
-                setError("Invalid Credentials");
+                const responseData = response.data;
+                if (responseData && responseData.message === "Incorrect password") {
+                    setError("Incorrect password");
+                } else {
+                    setError("Invalid Credentials");
+                }
             } else {
                 setError("Something went wrong. Please try again later.");
             }
         } catch (error) {
             console.error("Error occurred during user signup/login:", error);
-            setError("Something went wrong. Please try again later.");
+            setError("Incorrect Password");
         }
     };
+    
+
 
     const handleAdminSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!validate()) {
+            return;
+        }
         try {
             if (isSignUp && password !== confirmPassword) {
                 setError("Passwords do not match!");
@@ -90,9 +140,10 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
             }
         } catch (error) {
             console.error("Error occurred during admin login:", error);
-            setError("Something went wrong. Please try again later.");
+            setError("Incorrect Password");
         }
     };
+
 
     const renderRoleSelection = () => (
         <div className="flex flex-col items-center justify-center gap-2">
@@ -134,9 +185,9 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                 id="email"
                 name="email"
                 placeholder="Email"
-                required={true}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             />
+            {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
             <div className="relative">
                 <input
                     className="border border-slate-600 bg-transparent text-gray-900 text-md rounded-lg block w-full p-2.5 pr-10"
@@ -144,8 +195,6 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                     id="password"
                     name="password"
                     placeholder="Password"
-                    required={true}
-                    pattern=".{7,}"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -156,6 +205,7 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                     )}
                 </div>
             </div>
+            {errors.password && <div className="text-red-500 text-sm">{isSignUp ? errors.password : "Incorrect password"}</div>}
 
             {isSignUp && (
                 <div className="relative">
@@ -165,7 +215,6 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                         id="password-check"
                         name="password-check"
                         placeholder="Confirm Password"
-                        required={true}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -178,6 +227,8 @@ const AuthModal = ({ isVisible, onClose, setIsSignUp, isSignUp }: AuthModalProps
                     </div>
                 </div>
             )}
+            {errors.confirmPassword && <div className="text-red-500 text-sm">{errors.confirmPassword}</div>}
+            {error && <div className="text-red-500 text-sm">{error}</div>}
 
 
             <Button
